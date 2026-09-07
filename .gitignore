@@ -1,0 +1,13 @@
+/target/
+/.idea/
+*.iml
+/.vscode/
+/.local/
+.env
+.env.*
+!.env.example
+*.log
+*.mv.db
+*.trace.db
+*.pem
+*.key

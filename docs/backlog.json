@@ -1,0 +1,381 @@
+[
+  {
+    "id": "BA-01",
+    "title": "Define banking rules and predicted examples",
+    "milestone": "01 - Java foundation",
+    "depends": [],
+    "area": "domain",
+    "outcome": "Write account creation, amount precision, Savings limit, Premium rule and transfer decisions.",
+    "checkpoint": "Explain private balance, per-operation versus daily limits, and failure without mutation.",
+    "acceptance": "Document at least six concrete success/failure examples; distinguish login user from bank account; explicitly defer interest if no rule.",
+    "priority": "ready"
+  },
+  {
+    "id": "BA-02",
+    "title": "Create account state and constructor",
+    "milestone": "01 - Java foundation",
+    "depends": [
+      "BA-01"
+    ],
+    "area": "domain",
+    "outcome": "Implement the first BankAccount class yourself.",
+    "checkpoint": "Which fields must be private? What makes an account valid at creation?",
+    "acceptance": "Stable account ID; private BigDecimal balance; constructor rejects invalid state; no public balance setter.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-03",
+    "title": "Implement valid deposits",
+    "milestone": "01 - Java foundation",
+    "depends": [
+      "BA-02"
+    ],
+    "area": "domain",
+    "outcome": "Add deposits with explicit validation.",
+    "checkpoint": "What happens for null, zero, negative and excess-precision input?",
+    "acceptance": "Valid decimal deposit updates correctly; invalid inputs leave state unchanged; predict and run both cases.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-04",
+    "title": "Implement withdrawals and insufficient funds handling",
+    "milestone": "01 - Java foundation",
+    "depends": [
+      "BA-03"
+    ],
+    "area": "domain",
+    "outcome": "Enforce available-balance checks.",
+    "checkpoint": "In which order should validation happen? Can the balance reach zero?",
+    "acceptance": "Exact balance, overdraw, zero, negative and decimal amounts verified; rejection never changes balance.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-05",
+    "title": "Run a small console smoke demonstration",
+    "milestone": "01 - Java foundation",
+    "depends": [
+      "BA-04"
+    ],
+    "area": "domain",
+    "outcome": "Write Main to demonstrate your existing operations.",
+    "checkpoint": "Predict output before executing; keep banking logic outside Main.",
+    "acceptance": "Compile and run com.vmargin.banking.Main; record actual versus predicted output; this is a development runner.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-06",
+    "title": "Write the first meaningful JUnit tests",
+    "milestone": "01 - Java foundation",
+    "depends": [
+      "BA-05"
+    ],
+    "area": "testing",
+    "outcome": "Turn manual examples into repeatable tests.",
+    "checkpoint": "What state before and after distinguishes correct behaviour from an accidental pass?",
+    "acceptance": "Tests cover success and rejection; introduce a deliberate temporary mistake to show a test catches it, then restore correctly.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-07",
+    "title": "Implement justified Savings and Premium differences",
+    "milestone": "02 - Domain completion",
+    "depends": [
+      "BA-06"
+    ],
+    "area": "domain",
+    "outcome": "Add agreed inheritance and overrides.",
+    "checkpoint": "What rule changes between account types? Why is a cast unnecessary for overridden withdraw?",
+    "acceptance": "Savings limit and sufficient balance both enforced; Premium still cannot overdraw; tests invoke through parent reference.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-08",
+    "title": "Introduce domain exceptions and caller handling",
+    "milestone": "02 - Domain completion",
+    "depends": [
+      "BA-06"
+    ],
+    "area": "domain",
+    "outcome": "Give invalid operations clear failure signals.",
+    "checkpoint": "How does throwing differ from printing an error? Which layer explains it to the user?",
+    "acceptance": "Callers can distinguish relevant failures; no swallowed errors or partial mutation; tests assert exception and state.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-09",
+    "title": "Store and find multiple accounts behind a repository boundary",
+    "milestone": "02 - Domain completion",
+    "depends": [
+      "BA-07",
+      "BA-08"
+    ],
+    "area": "domain",
+    "outcome": "Add in-memory account lookup with a small contract.",
+    "checkpoint": "Why might service code depend on a storage contract instead of a specific collection?",
+    "acceptance": "Unique IDs; missing account handled; lookup tests; interface introduced only after learner explains it.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-10",
+    "title": "Record successful transaction history",
+    "milestone": "02 - Domain completion",
+    "depends": [
+      "BA-09"
+    ],
+    "area": "domain",
+    "outcome": "Define records with amount, type, time and account identity.",
+    "checkpoint": "Should callers be able to change old records? Which failures are recorded?",
+    "acceptance": "History matches successful operations; rejected operations follow documented policy; order and decimal amounts verified.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-11",
+    "title": "Coordinate transfers between two accounts",
+    "milestone": "02 - Domain completion",
+    "depends": [
+      "BA-10"
+    ],
+    "area": "domain",
+    "outcome": "Add transfer orchestration without duplicating account rules.",
+    "checkpoint": "What if receiver lookup or validation fails after sender debit?",
+    "acceptance": "Reject self and missing destination; preserve combined balance; no partial mutation on tested failures; two sides share a transfer reference.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-12",
+    "title": "Verify the domain gate and explain the design",
+    "milestone": "02 - Domain completion",
+    "depends": [
+      "BA-11"
+    ],
+    "area": "testing",
+    "outcome": "Review the working core before Spring.",
+    "checkpoint": "Trace one successful and one failed transfer without generated notes.",
+    "acceptance": "Maven tests pass; important boundaries covered; author explains rules; document concurrency as unverified in-memory scope.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-13",
+    "title": "Choose UI and draw three simple screens",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-01"
+    ],
+    "area": "design",
+    "outcome": "Commit to Thymeleaf default or explicitly budget React before UI implementation.",
+    "checkpoint": "Is a separate browser app worth the second build and API work now?",
+    "acceptance": "Dashboard, operation form and history sketch; error states; no commitment to rewriting Thymeleaf later.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-14",
+    "title": "Integrate Spring Boot around the tested domain",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-12",
+      "BA-13"
+    ],
+    "area": "web",
+    "outcome": "Select a supported Boot release then add only needed web dependencies.",
+    "checkpoint": "What does Spring create and connect? Which rules remain ordinary Java?",
+    "acceptance": "Core tests still pass; app starts; version compatibility verified; starter version pinned; domain rules not copied into controller.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-15",
+    "title": "Render dashboard and demo accounts",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-14"
+    ],
+    "area": "web",
+    "outcome": "Display synthetic account balances in the selected UI.",
+    "checkpoint": "Where does displayed state originate?",
+    "acceptance": "Readable dashboard; balances from service; explicit demo/reset notice; no real personal data.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-16",
+    "title": "Create accounts through a form",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-15"
+    ],
+    "area": "web",
+    "outcome": "Connect validated input to account creation.",
+    "checkpoint": "How do browser validation and server validation differ?",
+    "acceptance": "Valid account appears; blank or invalid input shows readable errors; stable ID generated; no direct field mutation.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-17",
+    "title": "Connect deposit and withdrawal forms",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-16"
+    ],
+    "area": "web",
+    "outcome": "Expose existing operations through forms.",
+    "checkpoint": "What happens when invalid text or an overdraw request reaches the server?",
+    "acceptance": "Correct updated balance; readable rejected-operation errors; no changes on rejection; refresh does not repeat successful operation.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-18",
+    "title": "Display transfers and transaction history",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-17"
+    ],
+    "area": "web",
+    "outcome": "Add complete transfer flow and history display.",
+    "checkpoint": "How will the user know which two accounts changed?",
+    "acceptance": "Both balances and history agree; unknown/self destination handled; success and failure verified end to end.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-19",
+    "title": "Style and verify keyboard-friendly pages",
+    "milestone": "03 - Web interface",
+    "depends": [
+      "BA-18"
+    ],
+    "area": "design",
+    "outcome": "Apply Bootstrap and small deliberate styling.",
+    "checkpoint": "Can a person find and correct an error without guessing?",
+    "acceptance": "Visible labels, focus states, readable currency; desktop and narrow viewport checked; CSS assets available for submission.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-20",
+    "title": "Complete regression walkthrough and record limitations",
+    "milestone": "04 - Submission",
+    "depends": [
+      "BA-19"
+    ],
+    "area": "testing",
+    "outcome": "Freeze optional features and verify the entire local app.",
+    "checkpoint": "Which claims are supported by tests versus screenshots?",
+    "acceptance": "Run build/tests; full happy and rejected flows; list unimplemented persistence/auth/deployment honestly.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-21",
+    "title": "Write README and practise technical explanation",
+    "milestone": "04 - Submission",
+    "depends": [
+      "BA-20"
+    ],
+    "area": "docs",
+    "outcome": "Document actual setup, architecture and verified features.",
+    "checkpoint": "Explain a rule change and the tests it affects.",
+    "acceptance": "Fresh run instructions work; architecture and limitations match code; no fabricated hiring or security claims.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-22",
+    "title": "Capture screenshots and assemble submission PDF",
+    "milestone": "04 - Submission",
+    "depends": [
+      "BA-21"
+    ],
+    "area": "docs",
+    "outcome": "Create screenshot documentation for September 12.",
+    "checkpoint": "What does each image prove?",
+    "acceptance": "Synthetic data consistent across screenshots; readable captions; PDF rendered and visually inspected; final upload remains user action.",
+    "priority": "backlog"
+  },
+  {
+    "id": "BA-23",
+    "title": "Persist accounts and history in PostgreSQL",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-12"
+    ],
+    "area": "persistence",
+    "outcome": "Add schema, repository implementation and environment configuration.",
+    "checkpoint": "What changes when objects become rows? Why is H2 not required first?",
+    "acceptance": "Data survives restart; SQL constraints and mappings tested; secrets external; migrations documented.",
+    "priority": "stretch"
+  },
+  {
+    "id": "BA-24",
+    "title": "Verify database transfer atomicity and concurrency",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-23"
+    ],
+    "area": "testing",
+    "outcome": "Add database transaction boundary and lost-update protection.",
+    "checkpoint": "What happens when two withdrawals race or a credit fails?",
+    "acceptance": "Rollback and concurrent-withdrawal integration tests; choose explainable locking approach; no negative balance or partial transfer.",
+    "priority": "stretch"
+  },
+  {
+    "id": "BA-25",
+    "title": "Implement authentication and account authorization",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-14",
+      "BA-23"
+    ],
+    "area": "security",
+    "outcome": "Add login only with explicit user-account ownership checks.",
+    "checkpoint": "Authentication identifies who; authorization decides whose account they may act on.",
+    "acceptance": "Password hashing via established library; session/CSRF design; another user's account access denied; credentials never committed.",
+    "priority": "stretch"
+  },
+  {
+    "id": "BA-26",
+    "title": "Package with Docker if the selected host needs it",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-14"
+    ],
+    "area": "deployment",
+    "outcome": "Create reproducible runtime packaging.",
+    "checkpoint": "What persists outside a container and where does configuration come from?",
+    "acceptance": "Image builds and app runs; no secrets in layers; ports and health check documented; optional independent of React/auth.",
+    "priority": "stretch"
+  },
+  {
+    "id": "BA-27",
+    "title": "Deploy a bounded synthetic-data demo",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-20"
+    ],
+    "area": "deployment",
+    "outcome": "Verify current free-host constraints and deploy when ready.",
+    "checkpoint": "Is the demo isolated per session, resettable/shared, or authenticated?",
+    "acceptance": "Explicit demo model chosen; ownership protected where needed; URL and full flows verified; persistence claims match deployment; cost/sleep limits documented.",
+    "priority": "stretch"
+  },
+  {
+    "id": "BA-28",
+    "title": "Evaluate React as an optional frontend direction",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-13",
+      "BA-20"
+    ],
+    "area": "design",
+    "outcome": "Decide whether React adds justified learning value.",
+    "checkpoint": "Which existing UI work would be replaced and what API contracts are needed?",
+    "acceptance": "Decision records time cost; if accepted define separate issues for API, state, errors and build; no automatic rewrite.",
+    "priority": "stretch"
+  },
+  {
+    "id": "BA-29",
+    "title": "Prepare interview demonstration from actual evidence",
+    "milestone": "05 - Portfolio upgrades",
+    "depends": [
+      "BA-21"
+    ],
+    "area": "docs",
+    "outcome": "Build a concise demo and explainable resume claim.",
+    "checkpoint": "Can you change a rule and repair its tests live?",
+    "acceptance": "Explain domain, tests, framework and limitations; commit/test evidence tied to claims; no certificate inference from course badge.",
+    "priority": "stretch"
+  }
+]
