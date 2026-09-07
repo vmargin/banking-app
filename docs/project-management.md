@@ -7,6 +7,8 @@
 
 There are 29 learning tasks. `docs/backlog.json` is the original planning seed; GitHub issue discussions and statuses become the live execution record. Do not overwrite progress from the seed. `scripts/sync-issues.ps1` only creates missing exact-title issues and is safe to rerun without duplicating existing titles.
 
+`docs/IMPLEMENTATION-BLUEPRINT.md` maps the issues to the proposed packages, classes, and coding flow. Read it before BA-01; it avoids treating the first issue as a blank-page architecture exercise.
+
 ## Daily rhythm
 
 Select the next issue whose prerequisites are satisfied. Keep one implementation issue In Progress. Write your prediction, attempt the code, run it, review it, and commit. Move to Review when evidence is ready and Done only after the acceptance criteria and explanation pass.

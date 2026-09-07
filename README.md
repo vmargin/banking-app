@@ -6,6 +6,7 @@ An educational banking simulator being built to demonstrate explainable Java pro
 
 Read [the full project guide](BANKING-APP-GUIDE.md) and [tomorrow's starting point](START-TOMORROW.md).
 For setup explanations, see [Workflow and Tools](docs/WORKFLOW-AND-TOOLS.md).
+For the classes, packages, and issue-by-issue coding flow, read the [Implementation Blueprint](docs/IMPLEMENTATION-BLUEPRINT.md).
 
 ## Development
 

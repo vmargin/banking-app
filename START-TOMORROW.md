@@ -1,10 +1,10 @@
 # Start tomorrow
 
-1. Read `BANKING-APP-GUIDE.md` tonight. The guide is a proposal with explicit cut lines, not a promise to finish every technology in five days.
+1. Read `BANKING-APP-GUIDE.md`, then `docs/IMPLEMENTATION-BLUEPRINT.md`. The blueprint gives the proposed packages, class responsibilities, default rules, and coding order; you do not need to invent the whole architecture alone.
 2. Open this directory in IntelliJ IDEA using `pom.xml`. Select the installed Temurin JDK 21 as the Project SDK and Maven runner JRE if prompted. Use the Maven Wrapper.
 3. Open PowerShell in this directory and run `.\scripts\dev.ps1 -Task doctor`.
-4. Start backlog item `BA-01` in `docs/backlog.json`: write your banking rules and predicted examples in `docs/domain-decisions.md`. No code yet.
-5. Explain why a negative deposit must leave the balance unchanged, what “Premium has no limit” means, and whether a savings limit is per withdrawal or per day.
+4. Start backlog item `BA-01`: confirm or deliberately change the proposed rules in `docs/IMPLEMENTATION-BLUEPRINT.md` and write six predicted examples in your own `docs/domain-decisions.md`.
+5. Treat BA-01 as a short requirements checkpoint, not as a request to design the entire system. The next task already specifies `BankAccount` and its responsibility.
 6. Review that attempt with the assistant. Then start `BA-02`: your first Java account class.
 
 ## First session prompt

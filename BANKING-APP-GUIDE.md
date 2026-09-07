@@ -2,6 +2,8 @@
 
 Planning baseline: September 7, 2026. This guide describes intended work; it is not evidence that the features exist. Completed work must be supported by a commit, a runnable result, and the learner's explanation. Repository and environment verification results belong in the setup handoff.
 
+Read `docs/IMPLEMENTATION-BLUEPRINT.md` with this guide. It supplies the concrete proposed package structure, class responsibilities, default baseline rules, and issue-by-issue coding flow. The learner is not expected to invent the complete architecture alone.
+
 ## 1. What we are building
 
 Build an educational banking simulator with clear Java business rules, a usable interface, and a history of small, explainable changes. The first milestone is a functioning TESDA Java Programming NCIII project. The longer goal is a portfolio project whose author can explain its design, demonstrate its behaviour, and change it during an interview.
@@ -157,7 +159,7 @@ If the domain gate slips, narrow the feature set immediately and reassess the in
 
 Open this project in IntelliJ and check the setup handoff for the verified JDK, build command, repository link, and first ready issue. Run the supplied environment/build check. An empty project with no tests is only a tooling result, not a working banking application.
 
-Start the rules issue by writing answers to these three checkpoints:
+Start the rules issue by confirming or deliberately changing the proposed defaults in `docs/IMPLEMENTATION-BLUEPRINT.md`, then write answers to these three checkpoints:
 
 1. An account contains PHP 1,000.00. Which parts of its state may outside code change directly, and why?
 2. A withdrawal of PHP 1,200.00 is attempted. What should the caller receive, and what must remain unchanged?
