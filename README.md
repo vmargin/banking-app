@@ -5,6 +5,7 @@ An educational banking simulator being built to demonstrate explainable Java pro
 **Status:** development environment and learning backlog prepared. Banking features have not been implemented.
 
 Read [the full project guide](BANKING-APP-GUIDE.md) and [tomorrow's starting point](START-TOMORROW.md).
+For setup explanations, see [Workflow and Tools](docs/WORKFLOW-AND-TOOLS.md).
 
 ## Development
 
