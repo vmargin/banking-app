@@ -4,7 +4,9 @@ An educational **Java Swing + JDBC + PostgreSQL** banking simulator for the TESD
 
 ## Status
 
-The Java/JDBC foundation is working: assessment models, PostgreSQL schema, user persistence, and eight verification tests are committed. Login, cash-in, transfer, history, Swing, and screenshot evidence remain.
+The local MVP is working: Swing login, balance dashboard, cash-in, atomic transfer,
+and per-user transaction history are backed by PostgreSQL. The automated suite has
+24 tests. Screenshot/PDF evidence is the remaining assessment-delivery work.
 
 ## Submission target
 
@@ -25,7 +27,9 @@ Use Temurin JDK 21 and the included Maven Wrapper on Windows:
 .\scripts\dev.ps1 -Task test
 ```
 
-`test` and `verify` run the current regression and JDBC checks. A green build does not yet prove the missing end-to-end banking flows.
+`test` and `verify` run the regression and JDBC checks. A green build verifies
+the covered domain, persistence, and transfer behavior; it does not replace a
+manual walkthrough of the Swing screens before screenshots are submitted.
 
 ## Scope boundary
 

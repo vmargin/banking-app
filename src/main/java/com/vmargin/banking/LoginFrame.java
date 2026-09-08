@@ -29,6 +29,7 @@ import java.awt.GridLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.FlowLayout;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
@@ -182,14 +183,14 @@ public class LoginFrame extends JFrame {
     private void showDashboard() {
         JPanel root = createScreenRoot();
         root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
-        root.add(createDashboardHeader(), BorderLayout.NORTH);
+        root.add(createScreenHeader(false), BorderLayout.NORTH);
         root.add(createDashboardContent(), BorderLayout.CENTER);
         setContentPane(root);
         setSize(DASHBOARD_WIDTH, DASHBOARD_HEIGHT);
         refreshScreen();
     }
 
-    private JPanel createDashboardHeader() {
+    private JPanel createScreenHeader(boolean includeBackButton) {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
 
@@ -197,12 +198,22 @@ public class LoginFrame extends JFrame {
         brand.setFont(new Font("Segoe UI", Font.BOLD, 20));
         brand.setForeground(PRIMARY_COLOR);
 
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        actions.setOpaque(false);
+        if (includeBackButton) {
+            JButton backButton = new JButton("Back to dashboard");
+            styleSecondaryButton(backButton);
+            backButton.addActionListener(event -> showDashboard());
+            actions.add(backButton);
+        }
+
         JButton logoutButton = new JButton("Log out");
         styleSecondaryButton(logoutButton);
         logoutButton.addActionListener(event -> resetToLogin());
+        actions.add(logoutButton);
 
         header.add(brand, BorderLayout.WEST);
-        header.add(logoutButton, BorderLayout.EAST);
+        header.add(actions, BorderLayout.EAST);
         return header;
     }
 
@@ -346,7 +357,7 @@ public class LoginFrame extends JFrame {
     private void showHistoryScreen() {
         JPanel root = createScreenRoot();
         root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
-        root.add(createDashboardHeader(), BorderLayout.NORTH);
+        root.add(createScreenHeader(true), BorderLayout.NORTH);
 
         JPanel content = verticalPanel();
         content.setBorder(BorderFactory.createEmptyBorder(28, 0, 0, 0));
@@ -358,17 +369,11 @@ public class LoginFrame extends JFrame {
         message.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         message.setForeground(MUTED_COLOR);
         message.setAlignmentX(LEFT_ALIGNMENT);
-        JButton backButton = new JButton("Back to dashboard");
-        stylePrimaryButton(backButton);
-        backButton.addActionListener(event -> showDashboard());
-
         content.add(title);
         content.add(Box.createVerticalStrut(6));
         content.add(message);
         content.add(Box.createVerticalStrut(18));
         content.add(createHistoryTable());
-        content.add(Box.createVerticalStrut(18));
-        content.add(backButton);
         root.add(content, BorderLayout.CENTER);
         setContentPane(root);
         setSize(DASHBOARD_WIDTH, DASHBOARD_HEIGHT);
@@ -412,6 +417,7 @@ public class LoginFrame extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setAlignmentX(LEFT_ALIGNMENT);
         scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
+        scrollPane.getViewport().setBackground(SURFACE_COLOR);
         scrollPane.setPreferredSize(new Dimension(DASHBOARD_WIDTH - 60, 230));
         scrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 230));
         return scrollPane;
@@ -426,7 +432,7 @@ public class LoginFrame extends JFrame {
     ) {
         JPanel root = createScreenRoot();
         root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
-        root.add(createDashboardHeader(), BorderLayout.NORTH);
+        root.add(createScreenHeader(true), BorderLayout.NORTH);
 
         JPanel content = verticalPanel();
         content.setBorder(BorderFactory.createEmptyBorder(30, 24, 0, 24));
@@ -516,8 +522,8 @@ public class LoginFrame extends JFrame {
     }
 
     private void stylePrimaryButton(JButton button) {
-        button.setBackground(SURFACE_COLOR);
-        button.setForeground(PRIMARY_COLOR);
+        button.setBackground(PRIMARY_COLOR);
+        button.setForeground(Color.WHITE);
         button.setOpaque(true);
         button.setContentAreaFilled(true);
         button.setBorder(BorderFactory.createCompoundBorder(
@@ -565,7 +571,7 @@ public class LoginFrame extends JFrame {
         javax.swing.JOptionPane.showMessageDialog(
             this,
             message,
-            "Cash-in",
+            "JCash",
             javax.swing.JOptionPane.WARNING_MESSAGE
         );
     }
