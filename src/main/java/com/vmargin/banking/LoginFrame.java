@@ -2,6 +2,7 @@ package com.vmargin.banking;
 
 import com.vmargin.banking.model.User;
 import com.vmargin.banking.service.LoginService;
+import com.vmargin.banking.service.CashInService;
 import com.vmargin.banking.service.exception.AccountLockedException;
 import com.vmargin.banking.service.exception.InvalidCredentialsException;
 
@@ -42,6 +43,7 @@ public class LoginFrame extends JFrame {
     private static final int DASHBOARD_HEIGHT = 500;
 
     private final LoginService loginService;
+    private final CashInService cashInService;
     private final JTextField mobileField = new JTextField();
     private final JPasswordField pinField = new JPasswordField();
     private final JButton loginButton = new JButton("Log in");
@@ -49,9 +51,10 @@ public class LoginFrame extends JFrame {
 
     private User currentUser;
 
-    public LoginFrame(LoginService loginService) {
+    public LoginFrame(LoginService loginService, CashInService cashInService) {
         super("JCash Banking App");
         this.loginService = loginService;
+        this.cashInService = cashInService;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         showLoginScreen();
@@ -255,8 +258,65 @@ public class LoginFrame extends JFrame {
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         styleSecondaryButton(button);
-        button.addActionListener(event -> showFeaturePreview(featureName));
+        button.addActionListener(event -> {
+            if ("Cash-in".equals(featureName)) {
+                showCashInScreen();
+            } else {
+                showFeaturePreview(featureName);
+            }
+        });
         return button;
+    }
+
+    private void showCashInScreen() {
+        JPanel root = createScreenRoot();
+        root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
+        root.add(createDashboardHeader(), BorderLayout.NORTH);
+
+        JPanel content = verticalPanel();
+        content.setBorder(BorderFactory.createEmptyBorder(34, 24, 0, 24));
+        JLabel title = new JLabel("Cash in");
+        title.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        title.setForeground(TEXT_COLOR);
+        JLabel subtitle = new JLabel("Add funds to your account and record the activity.");
+        subtitle.setForeground(MUTED_COLOR);
+        subtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        JTextField amountField = new JTextField();
+        JTextField detailsField = new JTextField("Cash-in");
+        content.add(title);
+        content.add(Box.createVerticalStrut(6));
+        content.add(subtitle);
+        content.add(Box.createVerticalStrut(22));
+        content.add(fieldLabel("Amount (PHP)"));
+        content.add(Box.createVerticalStrut(6));
+        content.add(amountField);
+        content.add(Box.createVerticalStrut(14));
+        content.add(fieldLabel("Details"));
+        content.add(Box.createVerticalStrut(6));
+        content.add(detailsField);
+        content.add(Box.createVerticalStrut(20));
+
+        JButton submitButton = new JButton("Confirm cash-in");
+        stylePrimaryButton(submitButton);
+        submitButton.addActionListener(event -> {
+            try {
+                BigDecimal amount = new BigDecimal(amountField.getText().trim());
+                cashInService.cashIn(currentUser, amount, detailsField.getText());
+                showDashboard();
+            } catch (NumberFormatException exception) {
+                showMessageDialog("Enter a valid amount, for example 500.00.");
+            } catch (IllegalArgumentException exception) {
+                showMessageDialog(exception.getMessage());
+            } catch (SQLException exception) {
+                showMessageDialog("Cash-in could not be saved. No balance was changed.");
+            }
+        });
+        content.add(submitButton);
+        root.add(content, BorderLayout.CENTER);
+        setContentPane(root);
+        refreshScreen();
+        amountField.requestFocusInWindow();
     }
 
     private void showFeaturePreview(String featureName) {
@@ -361,6 +421,15 @@ public class LoginFrame extends JFrame {
     private void showFeedback(String message) {
         feedbackLabel.setText(message);
         feedbackLabel.setForeground(ERROR_COLOR);
+    }
+
+    private void showMessageDialog(String message) {
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            message,
+            "Cash-in",
+            javax.swing.JOptionPane.WARNING_MESSAGE
+        );
     }
 
     private void refreshScreen() {
