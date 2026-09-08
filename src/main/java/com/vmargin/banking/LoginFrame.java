@@ -20,6 +20,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 
@@ -74,25 +77,52 @@ public class LoginFrame extends JFrame {
         heading.add(Box.createVerticalStrut(6));
         heading.add(subtitle);
 
-        JPanel form = verticalPanel();
-        form.setBorder(BorderFactory.createEmptyBorder(28, 16, 0, 16));
-        form.add(fieldLabel("Mobile number"));
-        form.add(Box.createVerticalStrut(6));
-        form.add(mobileField);
-        form.add(Box.createVerticalStrut(16));
-        form.add(fieldLabel("PIN"));
-        form.add(Box.createVerticalStrut(6));
-        form.add(pinField);
-        form.add(Box.createVerticalStrut(22));
+        JPanel form = new JPanel(new GridBagLayout());
+        form.setBackground(SURFACE_COLOR);
+        form.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(BORDER_COLOR),
+            BorderFactory.createEmptyBorder(24, 16, 20, 16)
+        ));
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(0, 0, 8, 12);
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 0;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        form.add(fieldLabel("Mobile number"), constraints);
+
+        constraints.insets = new Insets(0, 0, 8, 0);
+        constraints.weightx = 1;
+        constraints.gridx = 1;
+        form.add(mobileField, constraints);
+
+        constraints.insets = new Insets(0, 0, 22, 12);
+        constraints.weightx = 0;
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        form.add(fieldLabel("PIN"), constraints);
+
+        constraints.insets = new Insets(0, 0, 22, 0);
+        constraints.weightx = 1;
+        constraints.gridx = 1;
+        form.add(pinField, constraints);
 
         stylePrimaryButton(loginButton);
         loginButton.addActionListener(event -> attemptLogin());
-        form.add(loginButton);
-        form.add(Box.createVerticalStrut(14));
+        constraints.insets = new Insets(0, 0, 12, 0);
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        form.add(loginButton, constraints);
 
         feedbackLabel.setForeground(ERROR_COLOR);
         feedbackLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        form.add(feedbackLabel);
+        constraints.insets = new Insets(0, 0, 0, 0);
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
+        form.add(feedbackLabel, constraints);
 
         root.add(heading, BorderLayout.NORTH);
         root.add(form, BorderLayout.CENTER);
