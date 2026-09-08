@@ -7,7 +7,6 @@ public class BankAccount {
     private BigDecimal balance;
 
     public BankAccount(String accountId, String holderName, BigDecimal balance) {
-
         if (accountId == null || accountId.isBlank()) {
             throw new IllegalArgumentException("Account ID is required");
         }
@@ -25,31 +24,43 @@ public class BankAccount {
             throw new IllegalArgumentException(
                 "Opening balance cannot have more than 2 decimals");
         }
-
         this.accountId = accountId;
         this.holderName = holderName;
         this.balance = balance;
-
     }
-
     public String getAccountId() {
         return accountId;
     }
-
     public String getHolderName() {
         return holderName;
     }
-
     public BigDecimal getBalance() {
         return balance;
+    }
+
+    @Override
+    public String toString() {
+        return "Acc ID: " + accountId + "\nHolder Name: " + holderName + "\nBalance: " + balance;
+    }
+
+    public void deposit(BigDecimal amount) {
+        if (amount == null) {
+            throw new IllegalArgumentException("Amount is required");
+        }
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        if (amount.scale() > 2) {
+            throw new IllegalArgumentException("Amount cannot have more than 2 decimals");
+        }
+        this.balance = balance.add(amount);
     }
 
     public static void main(String[] args) {
 
         BankAccount bankAccount = new BankAccount("ACC-001", "Valkenburgh Margin", new BigDecimal("1000.00"));
-        System.out.println("ACC ID: " + bankAccount.getAccountId());
-        System.out.println("Holder Name: " + bankAccount.getHolderName());
-        System.out.println("Balance: PHP " + bankAccount.getBalance());
+        bankAccount.deposit(new BigDecimal("500"));
+        System.out.println(bankAccount.toString());
 
     }
 }
