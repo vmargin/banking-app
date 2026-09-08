@@ -42,15 +42,15 @@ The project is intentionally senior-coach style:
 
 This is not “AI writes a banking app while you watch.” The goal is that you can open any class, explain why it exists, change one business rule, and defend the result during an interview.
 
-## The immediate next issue
+## The active next feature
 
-Your current commits already establish account state, deposit, and withdrawal. The next task is **BA-05: regression tests**. Before writing code, answer:
+Your model, schema, JDBC connection, and user persistence work is already committed and verified. Do not restart BA-05 or BA-06. The next task is **Feature 1: Login + dashboard**: implement the three-attempt mobile/PIN rule, then connect it to a thin Swing login and balance screen.
 
 - What valid constructor, deposit, and withdrawal cases must pass?
 - Which rejected call must leave the balance unchanged?
 - How will an assertion prove that unchanged state?
 
-After those tests protect the current work, BA-06 introduces `User`, `Transaction`, `TransactionType`, and the required `model`/`service`/`util` structure. Then JDBC comes before the Swing screens.
+Use [Active Delivery Plan](docs/VERTICAL-DELIVERY-PLAN.md) for the grouped sequence. The older BA numbers remain traceability labels, not a requirement to stop after every class.
 
 ## Commands
 
@@ -64,4 +64,4 @@ After those tests protect the current work, BA-06 introduces `User`, `Transactio
 
 Use `doctor` to check Java/Maven, `style` and `compile` after source changes, `test` after test/behaviour changes, and `verify` for milestone checks. `test`/`verify` intentionally fail until you create real tests; a green compile is not feature evidence.
 
-Read [Assessment Alignment](docs/ASSESSMENT-ALIGNMENT.md), [Implementation Blueprint](docs/IMPLEMENTATION-BLUEPRINT.md), and [Engineering Standards](docs/ENGINEERING-STANDARDS.md) before BA-05.
+Read [Assessment Alignment](docs/ASSESSMENT-ALIGNMENT.md), [Active Delivery Plan](docs/VERTICAL-DELIVERY-PLAN.md), and [Engineering Standards](docs/ENGINEERING-STANDARDS.md) before the next feature.

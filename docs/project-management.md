@@ -5,7 +5,7 @@
 - Issues: https://github.com/vmargin/banking-app/issues
 - Milestones: https://github.com/vmargin/banking-app/milestones
 
-The current live plan is the 29-item assessment backlog in `docs/backlog.json`. The GitHub issues are the execution record; the JSON file is the sync source. [Assessment Alignment](ASSESSMENT-ALIGNMENT.md) explains why this sequence is Swing/JDBC-first rather than Spring-first.
+The 29-item assessment backlog in `docs/backlog.json` remains the traceability source. The active execution sequence is [VERTICAL-DELIVERY-PLAN.md](VERTICAL-DELIVERY-PLAN.md); GitHub issues retain detailed acceptance criteria.
 
 ## Issue rhythm
 
@@ -32,7 +32,7 @@ Never comment merely that an issue was started, and never close an issue just be
 
 ## Current handoff
 
-BA-02 and BA-03 have relevant committed work. BA-04 has a withdrawal commit but should be verified by BA-05 tests before it is treated as done. The next implementation issue is therefore **BA-05: regression tests for the current account rules**. Do not rewrite the current uncommitted `BankAccount.java` as part of the issue rebase.
+The model, schema, user JDBC persistence, and current regression checks are already committed. The next implementation checkpoint is **Feature 1: Login + dashboard**. BA-03 and BA-06 need issue-state/evidence reconciliation; do not restart completed code.
 
 ## GitHub synchronization
 

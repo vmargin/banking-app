@@ -4,7 +4,7 @@ An educational **Java Swing + JDBC + PostgreSQL** banking simulator for the TESD
 
 ## Status
 
-The environment and assessment-aligned delivery plan are prepared. `BankAccount` construction, deposit validation, and withdrawal validation have learner-authored commits; the required persistent login, cash-in, transfer, history, and Swing interface still need implementation and evidence.
+The Java/JDBC foundation is working: assessment models, PostgreSQL schema, user persistence, and eight verification tests are committed. Login, cash-in, transfer, history, Swing, and screenshot evidence remain.
 
 ## Submission target
 
@@ -12,7 +12,7 @@ The environment and assessment-aligned delivery plan are prepared. `BankAccount`
 mobile number + PIN -> logged-in balance -> cash-in / transfer -> per-user transaction history
 ```
 
-Read [Assessment Alignment](docs/ASSESSMENT-ALIGNMENT.md) for the requirement traceability and scope cut line. [Implementation Blueprint](docs/IMPLEMENTATION-BLUEPRINT.md) gives the package plan and coding sequence. [Project Management](docs/project-management.md) explains the issue workflow.
+Read [Assessment Alignment](docs/ASSESSMENT-ALIGNMENT.md), [Active Delivery Plan](docs/VERTICAL-DELIVERY-PLAN.md), and [Project Management](docs/project-management.md).
 
 ## Development
 
@@ -25,7 +25,7 @@ Use Temurin JDK 21 and the included Maven Wrapper on Windows:
 .\scripts\dev.ps1 -Task test
 ```
 
-`test` and `verify` intentionally fail until real learner-authored tests exist. A green compilation/style command is not proof that a banking flow works.
+`test` and `verify` run the current regression and JDBC checks. A green build does not yet prove the missing end-to-end banking flows.
 
 ## Scope boundary
 
