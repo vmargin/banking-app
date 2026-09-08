@@ -194,10 +194,12 @@ public class LoginFrame extends JFrame {
         JLabel greeting = new JLabel("Welcome back, " + currentUser.getFullName());
         greeting.setFont(new Font("Segoe UI", Font.BOLD, 25));
         greeting.setForeground(TEXT_COLOR);
+        greeting.setAlignmentX(LEFT_ALIGNMENT);
 
         JLabel description = new JLabel("Here is your current account overview.");
         description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         description.setForeground(MUTED_COLOR);
+        description.setAlignmentX(LEFT_ALIGNMENT);
 
         content.add(greeting);
         content.add(Box.createVerticalStrut(6));
@@ -311,6 +313,7 @@ public class LoginFrame extends JFrame {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Segoe UI", Font.BOLD, 14));
         label.setForeground(TEXT_COLOR);
+        label.setAlignmentX(LEFT_ALIGNMENT);
         return label;
     }
 
