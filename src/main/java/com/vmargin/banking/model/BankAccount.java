@@ -1,4 +1,4 @@
-package com.vmargin.banking;
+package com.vmargin.banking.model;
 import java.math.BigDecimal;
 
 public class BankAccount {
@@ -70,14 +70,5 @@ public class BankAccount {
             throw new IllegalArgumentException("Amount cannot be greater than balance");
         }
         this.balance = balance.subtract(amount);
-    }
-
-    public static void main(String[] args) {
-
-        BankAccount bankAccount = new BankAccount("ACC-001", "Valkenburgh Margin", new BigDecimal("1000.00"));
-        bankAccount.deposit(new BigDecimal("500"));
-
-        System.out.println(bankAccount.toString());
-
     }
 }
