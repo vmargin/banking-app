@@ -10,18 +10,19 @@ This note explains the setup already prepared in this repository. It is a refere
 - **Maven Wrapper:** the tracked `mvnw.cmd` script downloads/uses the project’s pinned Maven version, so the project does not depend on a globally installed Maven.
 - **Git:** records small, explainable changes.
 - **GitHub:** stores the repository and the learning issues/milestones.
-- **Docker/PostgreSQL/React:** available or planned for later milestones, not prerequisites for the first plain-Java domain work.
+- **PostgreSQL:** the selected local JDBC database for the assessment persistence phase; it is configured only when BA-07 becomes active.
+- **Docker/React/Spring:** portfolio upgrades after the Swing/JDBC assessment flow is proven.
 
 Use one primary IDE and one source of truth: this repository. Do not install several IDEs just to work on the same task.
 
 ## Why Maven is here
 
-Without Maven, you would manually download JUnit and later Spring JAR files, put them on the classpath, compile in the right order, and repeat that setup on every machine or CI run. Maven makes those instructions executable and repeatable.
+Without Maven, you would manually download JUnit and the PostgreSQL JDBC driver JAR, put them on the classpath, compile in the right order, and repeat that setup on every machine or CI run. Maven makes those instructions executable and repeatable.
 
 `pom.xml` is the project’s build recipe. It currently declares:
 
 1. Java release 21.
-2. JUnit Jupiter 5.13.4 as a test dependency.
+2. JUnit Jupiter 5.13.4 as a test dependency. The PostgreSQL JDBC driver is added in BA-07, when its connection is actually built and verified.
 3. Compiler, Surefire (test), and Exec (run a `Main` class) plugins.
 4. A deliberate `failIfNoTests` guard, so a green test command cannot hide an empty test suite.
 5. Maven Enforcer, which rejects a build run with the wrong Java/Maven baseline.
@@ -89,11 +90,11 @@ Run these from `C:\Users\margi\Desktop\lockedIn\banking-app` in PowerShell:
 | Command | Purpose | Current expected result |
 |---|---|---|
 | `doctor` | Shows the Maven and temporarily selected Temurin JDK versions | Passes now |
-| `style` | Runs the project’s Checkstyle rules against production and test Java code | Passes now; there is no banking source yet |
-| `compile` | Checks that current Java source compiles | Passes now; there is no banking source yet |
-| `test` | Compiles and runs project tests | Intentionally fails until you create a real test |
-| `verify` | Runs the full Maven lifecycle: tests, style gate, and packaging checks | Intentionally fails until BA-06 creates a real test |
-| `run` | Compiles and runs `com.vmargin.banking.Main` | Intentionally fails until you create `Main` |
+| `style` | Runs the project’s Checkstyle rules against production and test Java code | Must be checked against current learner-authored source |
+| `compile` | Checks that current Java source compiles | Must be checked after current source changes |
+| `test` | Compiles and runs project tests | Intentionally fails until BA-05 creates a real test |
+| `verify` | Runs the full Maven lifecycle: tests, style gate, and packaging checks | Intentionally fails until BA-05 creates a real test |
+| `run` | Compiles and runs `com.vmargin.banking.Main` | Intentionally fails until BA-15 creates `Main` |
 | `package` | Builds the distributable JAR after the project has runnable source/tests | Wait until the app exists |
 
 You do not need to run every command after every keystroke. Use `doctor` when checking the environment, `style` before committing Java code, `compile` after source changes, `test` after a test or behaviour change, and `verify`/`package`/`run` at the relevant milestone. The actual rules are in `docs/ENGINEERING-STANDARDS.md`.
@@ -122,7 +123,7 @@ Use this cycle:
 7. Move the issue to **Review** when the evidence and explanation are ready.
 8. Close it only after the acceptance criteria pass and you can explain the design. Reference the issue in the commit or pull request, for example `Refs #1` or `Closes #1` when closure is genuinely justified.
 
-For BA-01 specifically, do **not** start with Java code. Write the rules and predicted examples in `docs/domain-decisions.md`, then review that attempt before moving to BA-02.
+BA-01 to BA-04 are already represented by the assessment alignment and the learner’s current account commits. The immediate coding work is BA-05 tests; do not start Spring or desktop UI before persistent service work is proven.
 
 ## What the issue setup contains
 
@@ -136,11 +137,11 @@ The issue synchronization script creates missing exact-title issues and is safe 
 
 ## Tools intentionally not used yet
 
-- **Spring Boot:** added after the plain Java domain is understandable and working.
-- **PostgreSQL:** added when persistence is justified by the selected milestone; the installed server is currently stopped.
+- **PostgreSQL:** required for the JDBC persistence phase, but do not start its local service or commit credentials until BA-07.
+- **Spring Boot:** a post-submission portfolio upgrade after the plain Java Swing/JDBC application is understandable and working.
 - **Docker:** optional packaging/deployment support; the Docker CLI is installed, but the engine is currently not running.
 - **React:** an optional frontend direction. Decide before investing in a second UI; do not build both React and Thymeleaf just to collect technologies.
-- **Authentication and deployment:** important portfolio upgrades, but they come after the core behaviour and evidence unless the schedule changes.
+- **Production authentication and deployment:** important portfolio upgrades. The assessment needs a local mobile/PIN demonstration with a three-attempt limit, not a production security claim.
 
 These are not forgotten. They are deliberately separated so a technology setup task does not become a substitute for a working, explainable banking app.
 
@@ -149,8 +150,8 @@ These are not forgotten. They are deliberately separated so a technology setup t
 - [ ] Open the repository through `pom.xml` in IntelliJ.
 - [ ] Select Temurin JDK 21 as the project SDK and Maven JDK.
 - [ ] Run `.\scripts\dev.ps1 -Task doctor` from PowerShell.
-- [ ] Read GitHub issue BA-01.
-- [ ] Create `docs/domain-decisions.md` with your own rules and predicted examples.
-- [ ] Discuss the attempt before writing the first Java class.
+- [ ] Read GitHub issue BA-05.
+- [ ] Predict the BankAccount test cases before writing them.
+- [ ] Discuss the test attempt before moving to assessment models/JDBC.
 
 The learner writes the banking features. The assistant can explain concepts, challenge decisions, review diffs, and help verify output after an attempt exists.

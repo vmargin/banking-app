@@ -1,32 +1,36 @@
-# Banking App
+# JCash Banking App
 
-An educational banking simulator being built to demonstrate explainable Java programming.
+An educational **Java Swing + JDBC + PostgreSQL** banking simulator for the TESDA Java Programming NC III assessment. It uses synthetic data only and is being built through small learner-authored issues with review and verification.
 
-**Status:** development environment and learning backlog prepared. Banking features have not been implemented.
+## Status
 
-Read [the full project guide](BANKING-APP-GUIDE.md) and [tomorrow's starting point](START-TOMORROW.md).
-For setup explanations, see [Workflow and Tools](docs/WORKFLOW-AND-TOOLS.md).
-For the classes, packages, and issue-by-issue coding flow, read the [Implementation Blueprint](docs/IMPLEMENTATION-BLUEPRINT.md).
-For the coding, architecture, testing, and review rules used in this repository, read the [Engineering Standards](docs/ENGINEERING-STANDARDS.md).
+The environment and assessment-aligned delivery plan are prepared. `BankAccount` construction, deposit validation, and withdrawal validation have learner-authored commits; the required persistent login, cash-in, transfer, history, and Swing interface still need implementation and evidence.
+
+## Submission target
+
+```text
+mobile number + PIN -> logged-in balance -> cash-in / transfer -> per-user transaction history
+```
+
+Read [Assessment Alignment](docs/ASSESSMENT-ALIGNMENT.md) for the requirement traceability and scope cut line. [Implementation Blueprint](docs/IMPLEMENTATION-BLUEPRINT.md) gives the package plan and coding sequence. [Project Management](docs/project-management.md) explains the issue workflow.
 
 ## Development
 
-Use Java 21 and the included Maven Wrapper. On Windows:
+Use Temurin JDK 21 and the included Maven Wrapper on Windows:
 
 ```powershell
 .\scripts\dev.ps1 -Task doctor
 .\scripts\dev.ps1 -Task style
+.\scripts\dev.ps1 -Task compile
 .\scripts\dev.ps1 -Task test
 ```
 
-The test/verify phases intentionally fail when no tests exist. `style` is safe to run from the beginning; it checks the committed Java style rules. A successful setup or style check is not evidence that banking rules work.
+`test` and `verify` intentionally fail until real learner-authored tests exist. A green compilation/style command is not proof that a banking flow works.
 
-On another OS, install JDK 21 and run `./mvnw test`.
+## Scope boundary
 
-## Intended scope
-
-Account creation, deposits, withdrawals, account rules, transaction history, transfers, tests, then a Spring web interface. PostgreSQL, authentication, Docker and deployment are tracked as further milestones. All balances are simulated; no real financial services are provided.
+The September assessment core is Java, Swing, JDBC, a local PostgreSQL database, login attempts, balance, cash-in, transfer, history, tests, and screenshot evidence. Spring Boot, deployment, Docker, React, admin roles, and production authentication are portfolio upgrades after the assessment flow is safe.
 
 ## Authorship
 
-AI assistance prepares tooling, requirements and reviews. The learner reasons through and implements the banking features. Feature claims require source and test evidence.
+AI assistance prepares requirements, tooling, issue structure, and review. The learner writes the banking models, services, SQL, UI, and tests, then explains the resulting behaviour.

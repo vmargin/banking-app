@@ -1,33 +1,41 @@
 # Project management
 
-- Repository: https://github.com/vmargin/banking-app (private during development)
+- Repository: https://github.com/vmargin/banking-app (private while work is in progress)
 - Board: https://github.com/users/vmargin/projects/4
-- First task: https://github.com/vmargin/banking-app/issues/1
+- Issues: https://github.com/vmargin/banking-app/issues
 - Milestones: https://github.com/vmargin/banking-app/milestones
 
-There are 29 learning tasks. `docs/backlog.json` is the original planning seed; GitHub issue discussions and statuses become the live execution record. Do not overwrite progress from the seed. `scripts/sync-issues.ps1` only creates missing exact-title issues and is safe to rerun without duplicating existing titles.
+The current live plan is the 29-item assessment backlog in `docs/backlog.json`. The GitHub issues are the execution record; the JSON file is the sync source. [Assessment Alignment](ASSESSMENT-ALIGNMENT.md) explains why this sequence is Swing/JDBC-first rather than Spring-first.
 
-`docs/IMPLEMENTATION-BLUEPRINT.md` maps the issues to the proposed packages, classes, and coding flow. Read it before BA-01; it avoids treating the first issue as a blank-page architecture exercise.
+## Issue rhythm
 
-`docs/ENGINEERING-STANDARDS.md` defines the small, enforced Java/Maven/Spring quality baseline. Use it while implementing an issue; it is not a second set of features to build.
+1. Select only the next issue whose dependencies are satisfied.
+2. Move it to **In Progress** on the board.
+3. Write your prediction or question in chat, then make your own small attempt.
+4. Run the relevant command or walkthrough.
+5. Commit the coherent change with `Refs #<issue-number>`.
+6. Add one evidence comment to the issue:
 
-Every GitHub issue now also has an **Architecture and Coding Flow** section. `scripts/align-issues-with-blueprint.ps1` maintains that additive section without replacing an issue's outcome or acceptance criteria.
+```md
+## Evidence
 
-## Daily rhythm
-
-Select the next issue whose prerequisites are satisfied. Keep one implementation issue In Progress. Write your prediction, attempt the code, run it, review it, and commit. Move to Review when evidence is ready and Done only after the acceptance criteria and explanation pass.
-
-Milestones 01-04 lead to screenshot submission. Milestone 05 is a future backlog, not a promise to deliver every technology by September 12. Cut scope explicitly if the core slips.
-
-## Branch and commit example
-
-```powershell
-git switch -c task/ba-01-domain-rules
-git add docs/domain-decisions.md
-git commit -m "docs: define banking rules and examples"
-git push -u origin task/ba-01-domain-rules
+- Prediction:
+- What I changed:
+- Actual result:
+- Verification: command, test, or visual check
+- Remaining question:
 ```
 
-Run these after you write the file; it is intentionally not filled with an assistant's solution. Use a pull request to review a coherent change; reference its issue. Do not commit credentials, generated target output or local IDE settings.
+7. Move it to Review. Close only when its acceptance criteria, evidence, and your explanation are real.
 
-Use the browser for Projects management with the existing signed-in session. The installed CLI's default authentication requires additional scopes; the issue synchronization script uses the already authorized Git credential only in process memory and never saves or prints it.
+Never comment merely that an issue was started, and never close an issue just because source files exist.
+
+## Current handoff
+
+BA-02 and BA-03 have relevant committed work. BA-04 has a withdrawal commit but should be verified by BA-05 tests before it is treated as done. The next implementation issue is therefore **BA-05: regression tests for the current account rules**. Do not rewrite the current uncommitted `BankAccount.java` as part of the issue rebase.
+
+## GitHub synchronization
+
+`scripts/rebaseline-assessment-issues.ps1` updates the existing BA issue titles, bodies, labels, and milestones from `docs/backlog.json`. It does not change issue states, post comments, close issues, or move board items. Run it with `-DryRun` before live synchronization.
+
+The GitHub Projects access token does not currently provide Projects write scope, so board status remains a manual UI action. That is a tooling limitation, not an excuse to lose evidence in the issue itself.

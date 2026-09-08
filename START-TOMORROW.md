@@ -1,23 +1,33 @@
-# Start tomorrow
+# Start here
 
-1. Read `BANKING-APP-GUIDE.md`, then `docs/IMPLEMENTATION-BLUEPRINT.md`. The blueprint gives the proposed packages, class responsibilities, default rules, and coding order; you do not need to invent the whole architecture alone.
-2. Open this directory in IntelliJ IDEA using `pom.xml`. Select the installed Temurin JDK 21 as the Project SDK and Maven runner JRE if prompted. Use the Maven Wrapper.
-3. Open PowerShell in this directory and run `.\scripts\dev.ps1 -Task doctor`.
-4. Start backlog item `BA-01`: confirm or deliberately change the proposed rules in `docs/IMPLEMENTATION-BLUEPRINT.md` and write six predicted examples in your own `docs/domain-decisions.md`.
-5. Treat BA-01 as a short requirements checkpoint, not as a request to design the entire system. The next task already specifies `BankAccount` and its responsibility.
-6. Review that attempt with the assistant. Then start `BA-02`: your first Java account class.
-
-## First session prompt
-
-> Read this project's guide, setup report and BA-01. Coach me through one issue at a time. I write the banking code. Ask for my reasoning and attempt before showing a solution. Verify actual output and tests; don't close an issue because code merely exists. Start with the banking rules checkpoint.
-
-## Commands
+1. Read `docs/ASSESSMENT-ALIGNMENT.md`, then `docs/IMPLEMENTATION-BLUEPRINT.md`.
+2. Open `pom.xml` in IntelliJ IDEA and select Temurin JDK 21 as the Project SDK and Maven runner JRE.
+3. In PowerShell from this project folder, run:
 
 ```powershell
 .\scripts\dev.ps1 -Task doctor
+.\scripts\dev.ps1 -Task style
 .\scripts\dev.ps1 -Task compile
-.\scripts\dev.ps1 -Task test
-.\scripts\dev.ps1 -Task run
 ```
 
-`run` expects `com.vmargin.banking.Main` after you create it. Initially there is no application to run and no domain test to pass. See `SETUP-REPORT.md` for verified setup state and any GitHub action still needed.
+4. Do **not** rewrite the current `BankAccount.java` simply because the project plan changed. Its learner-authored construction/deposit/withdrawal work becomes your regression target.
+5. Start **BA-05: Write regression tests for the current account rules**. Before coding, explain in chat:
+
+```text
+Which constructor, deposit, and withdrawal cases should pass?
+Which failed call must leave the balance unchanged, and how will the test prove it?
+```
+
+6. Write the first JUnit attempt yourself. Then run `.\scripts\dev.ps1 -Task test` and bring the actual result for review.
+
+## Working loop
+
+```text
+Issue -> your prediction -> your code -> test/run -> review -> commit -> issue evidence
+```
+
+The next stages are assessment models/package structure, JDBC/schema, persistent services, then Swing. Spring, Docker, deployment, React, and an admin portal come only after the submission core is safe.
+
+## First-session prompt
+
+> Read Assessment Alignment and BA-05. Coach me through the JUnit tests for my current BankAccount code. Explain the concept, ask for my prediction, let me write the attempt, then review actual test output. Do not write the banking implementation for me.

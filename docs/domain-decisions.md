@@ -65,6 +65,18 @@
 - Real payments
 - Database persistence
 
+## Assessment rebase — binding constraints
+
+The original decisions above were made before the official JCash candidate instruction was available. The following assessment constraints now override the previous deferral of persistence and the previous demo-selector boundary:
+
+- Use a local JDBC database with synthetic users and transaction records.
+- Login uses a user's mobile number and local demo PIN, with a maximum of three failed attempts per login interaction.
+- A successful cash-in and transfer must update stored balance and transaction history.
+- History is retrieved per logged-in user.
+- The assessment UI will be Java Swing. Spring/admin roles/real authentication remain post-submission upgrades.
+
+The user must confirm any business-rule change beyond these binding constraints in the relevant issue before implementation.
+
 ## Six predicted scenarios
 
 1. Create `ACC-001` for Valk with `PHP 1,000.00` → success; balance is `PHP 1,000.00`.
