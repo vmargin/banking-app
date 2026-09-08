@@ -1,8 +1,10 @@
 package com.vmargin.banking;
 
 import com.vmargin.banking.model.User;
-import com.vmargin.banking.service.LoginService;
 import com.vmargin.banking.service.CashInService;
+import com.vmargin.banking.service.LoginService;
+import com.vmargin.banking.service.TransactionHistoryService;
+import com.vmargin.banking.service.TransferService;
 import com.vmargin.banking.service.exception.AccountLockedException;
 import com.vmargin.banking.service.exception.InvalidCredentialsException;
 
@@ -14,8 +16,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableModel;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,6 +31,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class LoginFrame extends JFrame {
 
@@ -44,6 +51,8 @@ public class LoginFrame extends JFrame {
 
     private final LoginService loginService;
     private final CashInService cashInService;
+    private final TransferService transferService;
+    private final TransactionHistoryService historyService;
     private final JTextField mobileField = new JTextField();
     private final JPasswordField pinField = new JPasswordField();
     private final JButton loginButton = new JButton("Log in");
@@ -51,10 +60,17 @@ public class LoginFrame extends JFrame {
 
     private User currentUser;
 
-    public LoginFrame(LoginService loginService, CashInService cashInService) {
+    public LoginFrame(
+        LoginService loginService,
+        CashInService cashInService,
+        TransferService transferService,
+        TransactionHistoryService historyService
+    ) {
         super("JCash Banking App");
         this.loginService = loginService;
         this.cashInService = cashInService;
+        this.transferService = transferService;
+        this.historyService = historyService;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         showLoginScreen();
@@ -246,9 +262,9 @@ public class LoginFrame extends JFrame {
     private JPanel createQuickActions() {
         JPanel actions = new JPanel(new GridLayout(1, 3, 12, 0));
         actions.setOpaque(false);
-        actions.add(createActionButton("Cash In", "Add funds", "Cash-in"));
-        actions.add(createActionButton("Transfer", "Send money", "Transfer"));
-        actions.add(createActionButton("History", "View activity", "Transaction history"));
+        actions.add(createActionButton("Cash In", "Add funds", "cash-in"));
+        actions.add(createActionButton("Transfer", "Send money", "transfer"));
+        actions.add(createActionButton("History", "View activity", "history"));
         return actions;
     }
 
@@ -258,45 +274,22 @@ public class LoginFrame extends JFrame {
         button.setHorizontalAlignment(SwingConstants.LEFT);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         styleSecondaryButton(button);
-        button.addActionListener(event -> {
-            if ("Cash-in".equals(featureName)) {
-                showCashInScreen();
-            } else {
-                showFeaturePreview(featureName);
-            }
-        });
+        button.addActionListener(event -> openQuickAction(featureName));
         return button;
     }
 
+    private void openQuickAction(String featureName) {
+        switch (featureName) {
+            case "cash-in" -> showCashInScreen();
+            case "transfer" -> showTransferScreen();
+            case "history" -> showHistoryScreen();
+            default -> throw new IllegalArgumentException("Unknown quick action");
+        }
+    }
+
     private void showCashInScreen() {
-        JPanel root = createScreenRoot();
-        root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
-        root.add(createDashboardHeader(), BorderLayout.NORTH);
-
-        JPanel content = verticalPanel();
-        content.setBorder(BorderFactory.createEmptyBorder(34, 24, 0, 24));
-        JLabel title = new JLabel("Cash in");
-        title.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        title.setForeground(TEXT_COLOR);
-        JLabel subtitle = new JLabel("Add funds to your account and record the activity.");
-        subtitle.setForeground(MUTED_COLOR);
-        subtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
         JTextField amountField = new JTextField();
         JTextField detailsField = new JTextField("Cash-in");
-        content.add(title);
-        content.add(Box.createVerticalStrut(6));
-        content.add(subtitle);
-        content.add(Box.createVerticalStrut(22));
-        content.add(fieldLabel("Amount (PHP)"));
-        content.add(Box.createVerticalStrut(6));
-        content.add(amountField);
-        content.add(Box.createVerticalStrut(14));
-        content.add(fieldLabel("Details"));
-        content.add(Box.createVerticalStrut(6));
-        content.add(detailsField);
-        content.add(Box.createVerticalStrut(20));
-
         JButton submitButton = new JButton("Confirm cash-in");
         stylePrimaryButton(submitButton);
         submitButton.addActionListener(event -> {
@@ -312,40 +305,185 @@ public class LoginFrame extends JFrame {
                 showMessageDialog("Cash-in could not be saved. No balance was changed.");
             }
         });
-        content.add(submitButton);
-        root.add(content, BorderLayout.CENTER);
-        setContentPane(root);
-        refreshScreen();
+        showFormScreen(
+            "Cash in",
+            "Add funds to your account and record the activity.",
+            new String[] {"Amount (PHP)", "Details"},
+            new JTextField[] {amountField, detailsField},
+            submitButton
+        );
         amountField.requestFocusInWindow();
     }
 
-    private void showFeaturePreview(String featureName) {
+    private void showTransferScreen() {
+        JTextField mobileNumberField = new JTextField();
+        JTextField amountField = new JTextField();
+        JButton submitButton = new JButton("Confirm transfer");
+        stylePrimaryButton(submitButton);
+        submitButton.addActionListener(event -> {
+            try {
+                BigDecimal amount = new BigDecimal(amountField.getText().trim());
+                transferService.transfer(currentUser, mobileNumberField.getText(), amount);
+                showDashboard();
+            } catch (NumberFormatException exception) {
+                showMessageDialog("Enter a valid amount, for example 500.00.");
+            } catch (IllegalArgumentException exception) {
+                showMessageDialog(exception.getMessage());
+            } catch (SQLException exception) {
+                showMessageDialog("Transfer could not be saved. No balance was changed.");
+            }
+        });
+        showFormScreen(
+            "Transfer",
+            "Send money securely to another local JCash account.",
+            new String[] {"Recipient mobile number", "Amount (PHP)"},
+            new JTextField[] {mobileNumberField, amountField},
+            submitButton
+        );
+        mobileNumberField.requestFocusInWindow();
+    }
+
+    private void showHistoryScreen() {
         JPanel root = createScreenRoot();
         root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
         root.add(createDashboardHeader(), BorderLayout.NORTH);
 
         JPanel content = verticalPanel();
-        content.setBorder(BorderFactory.createEmptyBorder(56, 28, 0, 28));
-        JLabel title = new JLabel(featureName);
+        content.setBorder(BorderFactory.createEmptyBorder(28, 0, 0, 0));
+        JLabel title = new JLabel("Transaction history");
         title.setFont(new Font("Segoe UI", Font.BOLD, 26));
         title.setForeground(TEXT_COLOR);
-        JLabel message = new JLabel(
-            "This interface is reserved for the next banking feature."
-        );
+        title.setAlignmentX(LEFT_ALIGNMENT);
+        JLabel message = new JLabel("Your most recent account activity appears first.");
         message.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         message.setForeground(MUTED_COLOR);
+        message.setAlignmentX(LEFT_ALIGNMENT);
         JButton backButton = new JButton("Back to dashboard");
         stylePrimaryButton(backButton);
         backButton.addActionListener(event -> showDashboard());
 
         content.add(title);
-        content.add(Box.createVerticalStrut(8));
+        content.add(Box.createVerticalStrut(6));
         content.add(message);
-        content.add(Box.createVerticalStrut(28));
+        content.add(Box.createVerticalStrut(18));
+        content.add(createHistoryTable());
+        content.add(Box.createVerticalStrut(18));
         content.add(backButton);
         root.add(content, BorderLayout.CENTER);
         setContentPane(root);
+        setSize(DASHBOARD_WIDTH, DASHBOARD_HEIGHT);
         refreshScreen();
+    }
+
+    private JScrollPane createHistoryTable() {
+        String[] columns = {"Type", "Amount", "Details", "When"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        try {
+            List<com.vmargin.banking.model.Transaction> transactions = historyService.getHistory(
+                currentUser
+            );
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy hh:mm a");
+            for (com.vmargin.banking.model.Transaction transaction : transactions) {
+                tableModel.addRow(new Object[] {
+                    formatTransactionType(transaction.getType().name()),
+                    formatBalance(transaction.getAmount()),
+                    transaction.getDetails(),
+                    transaction.getOccurredAt().format(formatter)
+                });
+            }
+        } catch (SQLException exception) {
+            showMessageDialog("Transaction history could not be loaded.");
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        table.setRowHeight(28);
+        table.setForeground(TEXT_COLOR);
+        table.setGridColor(BORDER_COLOR);
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        table.getTableHeader().setBackground(SURFACE_COLOR);
+        table.getTableHeader().setForeground(TEXT_COLOR);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setAlignmentX(LEFT_ALIGNMENT);
+        scrollPane.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
+        scrollPane.setPreferredSize(new Dimension(DASHBOARD_WIDTH - 60, 230));
+        scrollPane.setMaximumSize(new Dimension(Integer.MAX_VALUE, 230));
+        return scrollPane;
+    }
+
+    private void showFormScreen(
+        String titleText,
+        String subtitleText,
+        String[] fieldNames,
+        JTextField[] fields,
+        JButton submitButton
+    ) {
+        JPanel root = createScreenRoot();
+        root.setBorder(BorderFactory.createEmptyBorder(24, 30, 24, 30));
+        root.add(createDashboardHeader(), BorderLayout.NORTH);
+
+        JPanel content = verticalPanel();
+        content.setBorder(BorderFactory.createEmptyBorder(30, 24, 0, 24));
+        JLabel title = new JLabel(titleText);
+        title.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        title.setForeground(TEXT_COLOR);
+        title.setAlignmentX(LEFT_ALIGNMENT);
+        JLabel subtitle = new JLabel(subtitleText);
+        subtitle.setForeground(MUTED_COLOR);
+        subtitle.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitle.setAlignmentX(LEFT_ALIGNMENT);
+
+        JPanel form = new JPanel(new GridBagLayout());
+        form.setBackground(SURFACE_COLOR);
+        form.setAlignmentX(LEFT_ALIGNMENT);
+        form.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(BORDER_COLOR),
+            BorderFactory.createEmptyBorder(22, 20, 20, 20)
+        ));
+        addFormFields(form, fieldNames, fields, submitButton);
+
+        content.add(title);
+        content.add(Box.createVerticalStrut(6));
+        content.add(subtitle);
+        content.add(Box.createVerticalStrut(22));
+        content.add(form);
+        root.add(content, BorderLayout.CENTER);
+        setContentPane(root);
+        setSize(DASHBOARD_WIDTH, DASHBOARD_HEIGHT);
+        refreshScreen();
+    }
+
+    private void addFormFields(
+        JPanel form,
+        String[] fieldNames,
+        JTextField[] fields,
+        JButton submitButton
+    ) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        for (int index = 0; index < fields.length; index++) {
+            constraints.gridy = index;
+            constraints.gridx = 0;
+            constraints.weightx = 0;
+            constraints.insets = new Insets(0, 0, 14, 16);
+            form.add(fieldLabel(fieldNames[index]), constraints);
+            constraints.gridx = 1;
+            constraints.weightx = 1;
+            constraints.insets = new Insets(0, 0, 14, 0);
+            form.add(fields[index], constraints);
+        }
+        constraints.gridy = fields.length;
+        constraints.gridx = 1;
+        constraints.weightx = 1;
+        constraints.insets = new Insets(4, 0, 0, 0);
+        form.add(submitButton, constraints);
     }
 
     private JPanel createScreenRoot() {
@@ -440,5 +578,14 @@ public class LoginFrame extends JFrame {
 
     private String formatBalance(BigDecimal balance) {
         return "PHP " + balance.toPlainString();
+    }
+
+    private String formatTransactionType(String type) {
+        return switch (type) {
+            case "CASH_IN" -> "Cash in";
+            case "TRANSFER_SENT" -> "Transfer sent";
+            case "TRANSFER_RECEIVED" -> "Transfer received";
+            default -> type;
+        };
     }
 }

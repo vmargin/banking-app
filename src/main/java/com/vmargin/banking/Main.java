@@ -2,8 +2,12 @@ package com.vmargin.banking;
 
 import com.vmargin.banking.repository.JdbcUserRepository;
 import com.vmargin.banking.repository.JdbcCashInRepository;
+import com.vmargin.banking.repository.JdbcTransactionRepository;
+import com.vmargin.banking.repository.JdbcTransferRepository;
 import com.vmargin.banking.service.CashInService;
 import com.vmargin.banking.service.LoginService;
+import com.vmargin.banking.service.TransactionHistoryService;
+import com.vmargin.banking.service.TransferService;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -17,9 +21,18 @@ public final class Main {
     public static void main(String[] args) {
         LoginService loginService = new LoginService(new JdbcUserRepository());
         CashInService cashInService = new CashInService(new JdbcCashInRepository());
+        TransferService transferService = new TransferService(new JdbcTransferRepository());
+        TransactionHistoryService historyService = new TransactionHistoryService(
+            new JdbcTransactionRepository()
+        );
         configureLookAndFeel();
         SwingUtilities.invokeLater(
-            () -> new LoginFrame(loginService, cashInService).setVisible(true)
+            () -> new LoginFrame(
+                loginService,
+                cashInService,
+                transferService,
+                historyService
+            ).setVisible(true)
         );
     }
 
