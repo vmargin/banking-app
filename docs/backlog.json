@@ -5,9 +5,9 @@
     "milestone": "01 - Java foundation",
     "depends": [],
     "area": "domain",
-    "outcome": "Write account creation, amount precision, Savings limit, Premium rule and transfer decisions.",
-    "checkpoint": "Explain private balance, per-operation versus daily limits, and failure without mutation.",
-    "acceptance": "Document at least six concrete success/failure examples; distinguish login user from bank account; explicitly defer interest if no rule.",
+    "outcome": "Write account creation, amount precision, Savings limit, Premium rule, transfer, demo-role, and ownership decisions.",
+    "checkpoint": "Explain private balance, per-operation versus daily limits, failure without mutation, and why a demo selector is not login.",
+    "acceptance": "Document at least six concrete success/failure examples; define one ADMIN and at least one CUSTOMER with synthetic account ownership; distinguish login user from bank account; explicitly defer real authentication and interest if no rule.",
     "priority": "ready"
   },
   {
@@ -162,9 +162,9 @@
       "BA-01"
     ],
     "area": "design",
-    "outcome": "Commit to Thymeleaf default or explicitly budget React before UI implementation.",
-    "checkpoint": "Is a separate browser app worth the second build and API work now?",
-    "acceptance": "Dashboard, operation form and history sketch; error states; no commitment to rewriting Thymeleaf later.",
+    "outcome": "Commit to Thymeleaf default or explicitly budget React before UI implementation, including admin/customer states.",
+    "checkpoint": "Is a separate browser app worth the second build and API work now, and how will each demo role see the right accounts?",
+    "acceptance": "Dashboard, operation form, history sketch, acting-demo-user indicator, admin/customer access states, and error states; no commitment to rewriting Thymeleaf later.",
     "priority": "backlog"
   },
   {
@@ -189,9 +189,9 @@
       "BA-14"
     ],
     "area": "web",
-    "outcome": "Display synthetic account balances in the selected UI.",
-    "checkpoint": "Where does displayed state originate?",
-    "acceptance": "Readable dashboard; balances from service; explicit demo/reset notice; no real personal data.",
+    "outcome": "Display role-filtered synthetic account balances in the selected UI.",
+    "checkpoint": "Where does displayed state originate, and why may a customer see fewer accounts than an admin?",
+    "acceptance": "Readable admin and customer dashboards; balances from service; seeded identities and ownership; explicit demo/reset notice; no real personal data.",
     "priority": "backlog"
   },
   {
@@ -202,9 +202,9 @@
       "BA-15"
     ],
     "area": "web",
-    "outcome": "Connect validated input to account creation.",
-    "checkpoint": "How do browser validation and server validation differ?",
-    "acceptance": "Valid account appears; blank or invalid input shows readable errors; stable ID generated; no direct field mutation.",
+    "outcome": "Connect validated input to account creation and assign a selected demo owner.",
+    "checkpoint": "How do browser validation and server validation differ, and where is ownership associated?",
+    "acceptance": "Valid account appears under its selected owner; blank or invalid input shows readable errors; stable ID generated; no direct field mutation.",
     "priority": "backlog"
   },
   {
@@ -215,9 +215,9 @@
       "BA-16"
     ],
     "area": "web",
-    "outcome": "Expose existing operations through forms.",
-    "checkpoint": "What happens when invalid text or an overdraw request reaches the server?",
-    "acceptance": "Correct updated balance; readable rejected-operation errors; no changes on rejection; refresh does not repeat successful operation.",
+    "outcome": "Expose existing operations through forms after checking demo-user ownership.",
+    "checkpoint": "What happens when invalid text, an overdraw request, or another customer’s account reaches the server?",
+    "acceptance": "Correct updated balance for allowed access; readable rejected-operation and denied-access errors; no changes on rejection; refresh does not repeat successful operation.",
     "priority": "backlog"
   },
   {
@@ -228,9 +228,9 @@
       "BA-17"
     ],
     "area": "web",
-    "outcome": "Add complete transfer flow and history display.",
-    "checkpoint": "How will the user know which two accounts changed?",
-    "acceptance": "Both balances and history agree; unknown/self destination handled; success and failure verified end to end.",
+    "outcome": "Add complete transfer flow and ownership-filtered history display.",
+    "checkpoint": "How will the user know which two accounts changed, and which role is allowed to act on them?",
+    "acceptance": "Both balances and history agree; unknown/self destination handled; customer ownership enforced; admin access demonstrated; success and failure verified end to end.",
     "priority": "backlog"
   },
   {
@@ -241,9 +241,9 @@
       "BA-18"
     ],
     "area": "design",
-    "outcome": "Apply Bootstrap and small deliberate styling.",
-    "checkpoint": "Can a person find and correct an error without guessing?",
-    "acceptance": "Visible labels, focus states, readable currency; desktop and narrow viewport checked; CSS assets available for submission.",
+    "outcome": "Apply Bootstrap and small deliberate styling with visible role/access feedback.",
+    "checkpoint": "Can a person find and correct an error or understand denied access without guessing?",
+    "acceptance": "Visible labels, focus states, readable currency, role/ownership indicator; desktop and narrow viewport checked; CSS assets available for submission.",
     "priority": "backlog"
   },
   {
@@ -254,9 +254,9 @@
       "BA-19"
     ],
     "area": "testing",
-    "outcome": "Freeze optional features and verify the entire local app.",
-    "checkpoint": "Which claims are supported by tests versus screenshots?",
-    "acceptance": "Run build/tests; full happy and rejected flows; list unimplemented persistence/auth/deployment honestly.",
+    "outcome": "Freeze optional features and verify the entire local app, including admin/customer demo access.",
+    "checkpoint": "Which claims are supported by tests versus screenshots, and what does the demo selector not prove?",
+    "acceptance": "Run build/tests; full happy, rejected, and denied-access flows; list unimplemented persistence/real-auth/deployment honestly.",
     "priority": "backlog"
   },
   {

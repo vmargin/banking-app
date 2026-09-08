@@ -14,13 +14,14 @@ A project can support a job application; it cannot guarantee a job or demonstrat
 
 ## 2. Scope and success criteria
 
-The proposed first useful version supports creating or selecting demo accounts, displaying balances, depositing, withdrawing, transferring between accounts, and viewing transaction history. It rejects invalid operations without silently changing balances. Savings and Premium account differences are included only after their rules are written down.
+The proposed first useful version supports creating or selecting demo accounts, displaying balances, depositing, withdrawing, transferring between accounts, and viewing transaction history. It includes a small, explicit demo access model: an `ADMIN` can view/manage all seeded accounts, while a `CUSTOMER` can see and operate only on accounts assigned to that demo identity. A visible acting-user selector is a showcase control, not real login. It rejects invalid operations without silently changing balances. Savings and Premium account differences are included only after their rules are written down.
 
 Use fictional names and money throughout. There are no real bank connections, payments, deposits, identity checks, or financial products.
 
 | Priority | Outcome | Evidence |
 |---|---|---|
 | Required foundation | Java account operations and validation run correctly | Executed examples and automated tests |
+| Intended submission | Seeded admin/customer demo with ownership-aware screens | Local walkthrough showing allowed and denied account access |
 | Intended submission | Simple web interface presents working operations | Local walkthrough and screenshots |
 | Required handoff | Screenshot documentation and run instructions | Readable PDF and README |
 | Planned improvement | Data survives application restarts | Restart and retrieval check |
@@ -83,7 +84,7 @@ Avoid placing all rules inside a controller or `main`. That would make later int
 
 **Storage:** a repository boundary can reduce changes to calling code, but replacing a collection with PostgreSQL still requires a schema, mappings, constraints, configuration, and integration tests. The goal is manageable change, not zero change.
 
-**Authentication:** plan ownership and access rules early. Implement login when the application needs user isolation, and verify authorization before exposing personal accounts or real-user data. A public simulator without login must have intentionally disposable synthetic data and clearly limited shared actions. Adding security last by habit is not an architectural rule.
+**Identity and authentication:** plan ownership and access rules early. For the September demo, implement only seeded `ADMIN`/`CUSTOMER` identities, synthetic ownership, and an authorization check before account operations. Label the acting-user selector as demo-only; it is not authentication. Real login, password hashing, sessions/CSRF, and Spring Security belong to the later BA-25 upgrade, after persistence and the local flow are safe. A public simulator without login must have intentionally disposable synthetic data and clearly limited shared actions.
 
 **Deployment:** choose a host only after verifying support, current terms, and the application's needs. Keep configuration outside source code from the start, document the start command, and avoid hard-coded machine paths. This reduces later deployment friction without requiring a hosting account on day one.
 
@@ -100,7 +101,8 @@ The following are open design questions, not completed decisions:
 5. Can an account transfer to itself? The proposed behaviour is rejection.
 6. Can a missing or closed account receive money? Account closure can remain out of scope.
 7. Is interest part of this version? If included, define rate, period, rounding, and repeat application explicitly; otherwise defer it.
-8. What does transaction history show, and in which order?
+8. Which seeded customer owns each demo account, and may the admin act on all of them?
+9. What does transaction history show, and in which order?
 
 Write chosen rules with concrete examples. Do not use inheritance merely to display two names in a dropdown. If account types have no meaningful different behaviour yet, start with one and add the distinction when its rule exists.
 
@@ -117,9 +119,9 @@ Every implementation issue should contain a purpose, relevant concept, prerequis
 | Foundation | Write rules and examples; verify build workflow; design account state; protect balance; implement deposit; implement withdrawal |
 | Domain expansion | Define account-type behaviour; implement justified overrides; introduce domain exceptions; store and find accounts; record transactions; implement transfer |
 | Verification | Learn one JUnit test; cover rejected amounts; cover insufficient funds; cover transfer failure and conservation; review the domain explanation |
-| Web | Integrate Spring; display dashboard; add account creation; add deposit and withdrawal forms; show errors; add transfer form; display history; style and check usability |
+| Web | Integrate Spring; seed demo identities; display admin/customer dashboards; enforce ownership; add account creation; add deposit and withdrawal forms; show errors; add transfer form; display history; style and check usability |
 | Submission | Verify complete walkthrough; document limitations; write run instructions; capture screenshots; assemble and inspect PDF |
-| Portfolio | Persist with PostgreSQL; verify database transactions; plan and implement access control when needed; package if useful; deploy and verify; consider React separately |
+| Portfolio | Persist with PostgreSQL; verify database transactions; replace demo access with real authentication/authorization; package if useful; deploy and verify; consider React separately |
 
 A task is done when its stated behaviour works, the relevant checks pass, the author can explain the change, and the change is committed. Use a short branch for a coherent change and a small pull request where review helps. Do not create ceremony that consumes the coding session.
 
@@ -164,6 +166,7 @@ Start the rules issue by confirming or deliberately changing the proposed defaul
 1. An account contains PHP 1,000.00. Which parts of its state may outside code change directly, and why?
 2. A withdrawal of PHP 1,200.00 is attempted. What should the caller receive, and what must remain unchanged?
 3. A transfer credits its recipient unsuccessfully. What final balances would be acceptable, and which outcome would be a bug?
+4. A customer selects another customer's account. Where is that access rejected, and what may the admin do differently?
 
 Then choose the smallest account operation issue marked Ready. The first coding goal is a small runnable behaviour whose output you predicted. Do not begin by installing every future technology or generating the complete application.
 
