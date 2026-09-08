@@ -4,6 +4,8 @@ import com.vmargin.banking.repository.JdbcUserRepository;
 import com.vmargin.banking.service.LoginService;
 
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 public final class Main {
 
@@ -12,8 +14,17 @@ public final class Main {
 
     public static void main(String[] args) {
         LoginService loginService = new LoginService(new JdbcUserRepository());
+        configureLookAndFeel();
         SwingUtilities.invokeLater(
             () -> new LoginFrame(loginService).setVisible(true)
         );
+    }
+
+    private static void configureLookAndFeel() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ReflectiveOperationException | UnsupportedLookAndFeelException exception) {
+            // The default Swing look and feel is an acceptable fallback.
+        }
     }
 }

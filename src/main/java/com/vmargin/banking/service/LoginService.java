@@ -47,7 +47,7 @@ public class LoginService {
 
         User authenticatedUser = user.get();
 
-        if (!authenticatedUser.getPinForPersistence().equals(pin)) {
+        if (!authenticatedUser.matchesPin(pin)) {
             recordFailedAttempt();
             throw new InvalidCredentialsException("Incorrect PIN");
         }
@@ -69,6 +69,10 @@ public class LoginService {
 
     public int getFailedAttempts() {
         return failedAttempts;
+    }
+
+    public int getRemainingAttempts() {
+        return MAX_ATTEMPTS - failedAttempts;
     }
 
     public boolean isLocked() {

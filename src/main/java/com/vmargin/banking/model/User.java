@@ -56,6 +56,10 @@ public class User {
         return pin;
     }
 
+    public boolean matchesPin(String candidatePin) {
+        return pin.equals(candidatePin);
+    }
+
     public String getFullName() {
         return fullName;
     }
