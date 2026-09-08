@@ -34,6 +34,8 @@ Never comment merely that an issue was started, and never close an issue just be
 
 The model, schema, user JDBC persistence, and current regression checks are already committed. The next implementation checkpoint is **Feature 1: Login + dashboard**. BA-03 and BA-06 need issue-state/evidence reconciliation; do not restart completed code.
 
+GitHub synchronization is currently blocked locally because GitHub CLI has no authenticated session (`gh auth status` reports not logged in). The local vertical plan is updated first; issue closing, comments, labels, and board movement require an authenticated GitHub session.
+
 ## GitHub synchronization
 
 `scripts/rebaseline-assessment-issues.ps1` updates the existing BA issue titles, bodies, labels, and milestones from `docs/backlog.json`. It does not change issue states, post comments, close issues, or move board items. Run it with `-DryRun` before live synchronization.

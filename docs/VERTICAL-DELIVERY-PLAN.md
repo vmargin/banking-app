@@ -25,3 +25,7 @@ Related items: BA-13, BA-20, BA-22 through BA-27.
 For each feature, the learner explains the flow, writes the first service/UI attempt, and records the predicted result. The assistant may handle repetitive plumbing, diagnostics, verification, and documentation cleanup; the learner owns business rules and the final explanation.
 
 Spring, Docker, deployment, React, and admin roles remain post-assessment upgrades.
+
+## Current status override
+
+The older `docs/backlog.json` priority fields are historical and may lag the repository. Treat the committed code and verification output as the source of truth until the GitHub issue states and evidence comments are reconciled.
