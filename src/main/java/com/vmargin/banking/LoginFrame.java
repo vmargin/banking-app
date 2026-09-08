@@ -152,6 +152,11 @@ public class LoginFrame extends JFrame {
             setLoginControlsEnabled(false);
         } catch (SQLException exception) {
             showFeedback("Unable to reach the local database. Check the connection settings.");
+        } catch (IllegalStateException exception) {
+            showFeedback(
+                "Database configuration is missing. Set BANKING_DB_USER and "
+                    + "BANKING_DB_PASSWORD in the run configuration."
+            );
         }
     }
 
