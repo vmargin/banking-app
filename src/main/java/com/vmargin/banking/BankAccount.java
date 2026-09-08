@@ -56,10 +56,27 @@ public class BankAccount {
         this.balance = balance.add(amount);
     }
 
+    public void withdraw(BigDecimal amount) {
+        if (amount == null) {
+            throw new IllegalArgumentException("Amount is required");
+        }
+        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        if (amount.scale() > 2) {
+            throw new IllegalArgumentException("Amount cannot have more than 2 decimals");
+        }
+        if (amount.compareTo(balance) > 0) {
+            throw new IllegalArgumentException("Amount cannot be greater than balance");
+        }
+        this.balance = balance.subtract(amount);
+    }
+
     public static void main(String[] args) {
 
         BankAccount bankAccount = new BankAccount("ACC-001", "Valkenburgh Margin", new BigDecimal("1000.00"));
         bankAccount.deposit(new BigDecimal("500"));
+
         System.out.println(bankAccount.toString());
 
     }
