@@ -1,4 +1,5 @@
 package com.vmargin.banking.model;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -18,8 +19,8 @@ public class Transaction {
         BigDecimal amount,
         String details,
         LocalDateTime occurredAt
-    )  {
-        if (id< 0) {
+    ) {
+        if (id < 0) {
             throw new IllegalArgumentException("Transaction ID cannot be negative");
         }
         if (userId <= 0) {
@@ -31,7 +32,9 @@ public class Transaction {
         }
 
         if (amount.scale() > 2) {
-            throw new IllegalArgumentException("Transaction amount cannot cannot have more than 2 decimals");
+            throw new IllegalArgumentException(
+                "Transaction amount cannot have more than 2 decimals"
+            );
         }
         if (details == null || details.isBlank()) {
             throw new IllegalArgumentException("Transaction details are required");
@@ -44,7 +47,8 @@ public class Transaction {
         this.details = details;
         this.occurredAt = Objects.requireNonNull(
             occurredAt,
-            "Transaction time is required");
+            "Transaction time is required"
+        );
     }
     public long getId() {
         return id;
