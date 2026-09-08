@@ -9,6 +9,8 @@ There are 29 learning tasks. `docs/backlog.json` is the original planning seed; 
 
 `docs/IMPLEMENTATION-BLUEPRINT.md` maps the issues to the proposed packages, classes, and coding flow. Read it before BA-01; it avoids treating the first issue as a blank-page architecture exercise.
 
+`docs/ENGINEERING-STANDARDS.md` defines the small, enforced Java/Maven/Spring quality baseline. Use it while implementing an issue; it is not a second set of features to build.
+
 Every GitHub issue now also has an **Architecture and Coding Flow** section. `scripts/align-issues-with-blueprint.ps1` maintains that additive section without replacing an issue's outcome or acceptance criteria.
 
 ## Daily rhythm

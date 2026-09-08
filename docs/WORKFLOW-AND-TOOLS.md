@@ -24,6 +24,8 @@ Without Maven, you would manually download JUnit and later Spring JAR files, put
 2. JUnit Jupiter 5.13.4 as a test dependency.
 3. Compiler, Surefire (test), and Exec (run a `Main` class) plugins.
 4. A deliberate `failIfNoTests` guard, so a green test command cannot hide an empty test suite.
+5. Maven Enforcer, which rejects a build run with the wrong Java/Maven baseline.
+6. Checkstyle, which checks the repository’s small Java naming and formatting baseline.
 
 Maven does **not** write the banking logic for you. It only manages the repeatable build/test process.
 
@@ -76,8 +78,10 @@ Run these from `C:\Users\margi\Desktop\lockedIn\banking-app` in PowerShell:
 
 ```powershell
 .\scripts\dev.ps1 -Task doctor
+.\scripts\dev.ps1 -Task style
 .\scripts\dev.ps1 -Task compile
 .\scripts\dev.ps1 -Task test
+.\scripts\dev.ps1 -Task verify
 .\scripts\dev.ps1 -Task run
 .\scripts\dev.ps1 -Task package
 ```
@@ -85,12 +89,14 @@ Run these from `C:\Users\margi\Desktop\lockedIn\banking-app` in PowerShell:
 | Command | Purpose | Current expected result |
 |---|---|---|
 | `doctor` | Shows the Maven and temporarily selected Temurin JDK versions | Passes now |
+| `style` | Runs the project’s Checkstyle rules against production and test Java code | Passes now; there is no banking source yet |
 | `compile` | Checks that current Java source compiles | Passes now; there is no banking source yet |
 | `test` | Compiles and runs project tests | Intentionally fails until you create a real test |
+| `verify` | Runs the full Maven lifecycle: tests, style gate, and packaging checks | Intentionally fails until BA-06 creates a real test |
 | `run` | Compiles and runs `com.vmargin.banking.Main` | Intentionally fails until you create `Main` |
 | `package` | Builds the distributable JAR after the project has runnable source/tests | Wait until the app exists |
 
-You do not need to run every command after every keystroke. Use `doctor` when checking the environment, `compile` after source changes, `test` after a test or behaviour change, and `package`/`run` at the relevant milestone.
+You do not need to run every command after every keystroke. Use `doctor` when checking the environment, `style` before committing Java code, `compile` after source changes, `test` after a test or behaviour change, and `verify`/`package`/`run` at the relevant milestone. The actual rules are in `docs/ENGINEERING-STANDARDS.md`.
 
 ## How to answer the guide’s questions
 

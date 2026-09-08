@@ -5,6 +5,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $blueprintUrl = "https://github.com/$Repository/blob/main/docs/IMPLEMENTATION-BLUEPRINT.md"
+$standardsUrl = "https://github.com/$Repository/blob/main/docs/ENGINEERING-STANDARDS.md"
 $gh = (Get-Command gh -ErrorAction SilentlyContinue).Source
 if (-not $gh) { $gh = Join-Path $env:ProgramFiles 'GitHub CLI\gh.exe' }
 if (-not (Test-Path -LiteralPath $gh)) { throw 'GitHub CLI is required.' }
@@ -79,6 +80,8 @@ $baseBody
 ## Architecture and Coding Flow
 
 **Read first:** [$blueprintUrl]($blueprintUrl)
+
+**Working standards:** [$standardsUrl]($standardsUrl)
 
 **Architecture target:** $($item.target)
 

@@ -14,12 +14,12 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - name: Build bootstrap or run real tests
+      - name: Check style and build bootstrap or run real tests
         shell: bash
         run: |
           if find src/test -name '*.java' -print -quit | grep -q .; then
             sh ./mvnw --batch-mode verify
           else
             echo '::notice::Bootstrap only: no Java tests exist. No banking behaviour has been verified.'
-            sh ./mvnw --batch-mode compile
+            sh ./mvnw --batch-mode checkstyle:check compile
           fi

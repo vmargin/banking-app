@@ -1,4 +1,4 @@
-param([ValidateSet('doctor','compile','test','run','package')][string]$Task = 'doctor')
+param([ValidateSet('doctor','style','compile','test','verify','run','package')][string]$Task = 'doctor')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $jdkRoot = Join-Path $env:ProgramFiles 'Eclipse Adoptium'
@@ -14,8 +14,10 @@ try {
     try {
         switch ($Task) {
             doctor { & .\mvnw.cmd -version }
+            style { & .\mvnw.cmd --batch-mode checkstyle:check }
             compile { & .\mvnw.cmd --batch-mode compile }
             test { & .\mvnw.cmd --batch-mode test }
+            verify { & .\mvnw.cmd --batch-mode verify }
             package { & .\mvnw.cmd --batch-mode package }
             run { & .\mvnw.cmd --batch-mode compile exec:java '-Dexec.mainClass=com.vmargin.banking.Main' }
         }

@@ -4,6 +4,8 @@
 
 This document does **not** claim that the classes or features already exist. Do not create every file now. Create each class only when its issue becomes active.
 
+Apply [Engineering Standards](ENGINEERING-STANDARDS.md) from BA-02 onward. They are the project’s active naming, architecture, validation, testing, and review rules; they are deliberately smaller than a generic enterprise-pattern catalogue.
+
 ## 1. The build target
 
 For the September 12 submission, the target is a **single Java/Spring banking simulator**, not a real bank and not a collection of unrelated technologies.
