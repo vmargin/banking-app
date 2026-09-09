@@ -3,9 +3,33 @@ CREATE TABLE IF NOT EXISTS users (
                                      mobile_number VARCHAR(20) NOT NULL UNIQUE,
     pin VARCHAR(20) NOT NULL,
     full_name VARCHAR(120) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'USER',
     balance NUMERIC(15, 2) NOT NULL DEFAULT 0,
-    CHECK (balance >= 0)
+    CHECK (balance >= 0),
+    CONSTRAINT valid_user_role CHECK (role IN ('ADMIN', 'USER'))
     );
+
+ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS role VARCHAR(20) NOT NULL DEFAULT 'USER';
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'valid_user_role'
+    ) THEN
+        ALTER TABLE users
+            ADD CONSTRAINT valid_user_role CHECK (role IN ('ADMIN', 'USER'));
+    END IF;
+END $$;
+
+INSERT INTO users (mobile_number, pin, full_name, role, balance)
+VALUES ('09990000000', '1234', 'JCash Administrator', 'ADMIN', 0)
+ON CONFLICT (mobile_number) DO UPDATE SET
+    pin = EXCLUDED.pin,
+    full_name = EXCLUDED.full_name,
+    role = EXCLUDED.role;
 
 CREATE TABLE IF NOT EXISTS transactions (
                                             id BIGSERIAL PRIMARY KEY,

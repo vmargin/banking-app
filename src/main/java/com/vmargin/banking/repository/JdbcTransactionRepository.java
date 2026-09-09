@@ -28,6 +28,12 @@ public class JdbcTransactionRepository implements TransactionRepository {
         ORDER BY occurred_at DESC, id DESC
         """;
 
+    private static final String FIND_ALL_SQL = """
+        SELECT id, user_id, type, amount, details, occurred_at
+        FROM transactions
+        ORDER BY occurred_at DESC, id DESC
+        """;
+
     @Override
     public Transaction save(Transaction transaction) throws SQLException {
         Objects.requireNonNull(transaction, "Transaction is required");
@@ -72,17 +78,36 @@ public class JdbcTransactionRepository implements TransactionRepository {
             statement.setLong(1, userId);
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    transactions.add(new Transaction(
-                        resultSet.getLong("id"),
-                        resultSet.getLong("user_id"),
-                        TransactionType.valueOf(resultSet.getString("type")),
-                        resultSet.getBigDecimal("amount"),
-                        resultSet.getString("details"),
-                        resultSet.getTimestamp("occurred_at").toLocalDateTime()
-                    ));
+                    transactions.add(mapTransaction(resultSet));
                 }
             }
         }
         return List.copyOf(transactions);
+    }
+
+    @Override
+    public List<Transaction> findAll() throws SQLException {
+        List<Transaction> transactions = new ArrayList<>();
+        try (
+            Connection connection = DatabaseConnection.open();
+            PreparedStatement statement = connection.prepareStatement(FIND_ALL_SQL);
+            ResultSet resultSet = statement.executeQuery()
+        ) {
+            while (resultSet.next()) {
+                transactions.add(mapTransaction(resultSet));
+            }
+        }
+        return List.copyOf(transactions);
+    }
+
+    private Transaction mapTransaction(ResultSet resultSet) throws SQLException {
+        return new Transaction(
+            resultSet.getLong("id"),
+            resultSet.getLong("user_id"),
+            TransactionType.valueOf(resultSet.getString("type")),
+            resultSet.getBigDecimal("amount"),
+            resultSet.getString("details"),
+            resultSet.getTimestamp("occurred_at").toLocalDateTime()
+        );
     }
 }

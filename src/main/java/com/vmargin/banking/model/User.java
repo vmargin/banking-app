@@ -11,6 +11,7 @@ public class User {
     private final String pin;
     private final String fullName;
     private final BankAccount bankAccount;
+    private final UserRole role;
     private final List<Transaction> transactions;
 
     public User(
@@ -20,8 +21,19 @@ public class User {
         String fullName,
         BankAccount bankAccount
     ) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("User ID must be positive");
+        this(id, mobileNumber, pin, fullName, bankAccount, UserRole.USER);
+    }
+
+    public User(
+        long id,
+        String mobileNumber,
+        String pin,
+        String fullName,
+        BankAccount bankAccount,
+        UserRole role
+    ) {
+        if (id < 0) {
+            throw new IllegalArgumentException("User ID cannot be negative");
         }
         if (mobileNumber == null || mobileNumber.isBlank()) {
             throw new IllegalArgumentException("Mobile number is required");
@@ -41,6 +53,7 @@ public class User {
             bankAccount,
             "Bank account is required"
         );
+        this.role = Objects.requireNonNull(role, "User role is required");
         this.transactions = new ArrayList<>();
     }
 
@@ -66,6 +79,14 @@ public class User {
 
     public BigDecimal getBalance() {
         return bankAccount.getBalance();
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public boolean isAdmin() {
+        return role == UserRole.ADMIN;
     }
 
     public BankAccount getBankAccount() {

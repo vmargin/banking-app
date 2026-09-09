@@ -4,8 +4,10 @@ import com.vmargin.banking.repository.JdbcUserRepository;
 import com.vmargin.banking.repository.JdbcCashInRepository;
 import com.vmargin.banking.repository.JdbcTransactionRepository;
 import com.vmargin.banking.repository.JdbcTransferRepository;
+import com.vmargin.banking.service.AdminService;
 import com.vmargin.banking.service.CashInService;
 import com.vmargin.banking.service.LoginService;
+import com.vmargin.banking.service.RegistrationService;
 import com.vmargin.banking.service.TransactionHistoryService;
 import com.vmargin.banking.service.TransferService;
 
@@ -19,19 +21,23 @@ public final class Main {
     }
 
     public static void main(String[] args) {
-        LoginService loginService = new LoginService(new JdbcUserRepository());
+        JdbcUserRepository userRepository = new JdbcUserRepository();
+        JdbcTransactionRepository transactionRepository = new JdbcTransactionRepository();
+        LoginService loginService = new LoginService(userRepository);
         CashInService cashInService = new CashInService(new JdbcCashInRepository());
         TransferService transferService = new TransferService(new JdbcTransferRepository());
-        TransactionHistoryService historyService = new TransactionHistoryService(
-            new JdbcTransactionRepository()
-        );
+        TransactionHistoryService historyService = new TransactionHistoryService(transactionRepository);
+        RegistrationService registrationService = new RegistrationService(userRepository);
+        AdminService adminService = new AdminService(userRepository, transactionRepository);
         configureLookAndFeel();
         SwingUtilities.invokeLater(
             () -> new LoginFrame(
                 loginService,
                 cashInService,
                 transferService,
-                historyService
+                historyService,
+                registrationService,
+                adminService
             ).setVisible(true)
         );
     }
