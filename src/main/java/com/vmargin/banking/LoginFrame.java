@@ -89,7 +89,7 @@ public class LoginFrame extends JFrame {
         RegistrationService registrationService,
         AdminService adminService
     ) {
-        super("JCash Banking App");
+        super("CASH-G Banking App");
         this.loginService = loginService;
         this.cashInService = cashInService;
         this.transferService = transferService;
@@ -109,7 +109,7 @@ public class LoginFrame extends JFrame {
         mobileField.setName("mobile-number");
         mobileField.getAccessibleContext().setAccessibleName("Mobile number");
         mobileField.getAccessibleContext().setAccessibleDescription(
-            "Enter the mobile number registered to this JCash demo account"
+            "Enter the mobile number registered to this CASH-G demo account"
         );
         pinField.setName("pin");
         pinField.getAccessibleContext().setAccessibleName("PIN");
@@ -125,7 +125,7 @@ public class LoginFrame extends JFrame {
         JPanel root = createScreenRoot();
         root.setBorder(BorderFactory.createEmptyBorder(32, 44, 32, 44));
 
-        JLabel title = new JLabel("JCASH", SwingConstants.CENTER);
+        JLabel title = new JLabel("CASH-G", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 28));
         title.setForeground(PRIMARY_COLOR);
         title.setAlignmentX(CENTER_ALIGNMENT);
@@ -242,17 +242,17 @@ public class LoginFrame extends JFrame {
             pinField.requestFocusInWindow();
         } else if (cause instanceof AccountLockedException) {
             showFeedback(
-                "Login is locked for this app session. Close and reopen JCash to try again.",
+                "Login is locked for this app session. Close and reopen CASH-G to try again.",
                 ERROR_COLOR
             );
             setLoginControlsEnabled(false);
         } else if (cause instanceof java.sql.SQLException) {
             restoreLoginAfterFailure(
-                "JCash could not reach local account data. Check the database connection."
+                "CASH-G could not reach local account data. Check the database connection."
             );
         } else if (cause instanceof IllegalStateException) {
             restoreLoginAfterFailure(
-                "JCash is not configured for local account data. Check the run setup."
+                "CASH-G is not configured for local account data. Check the run setup."
             );
         } else {
             restoreLoginAfterFailure("Sign-in failed unexpectedly. Try again.");
@@ -288,7 +288,7 @@ public class LoginFrame extends JFrame {
         ));
         showFormScreen(
             "Create account",
-            "Create a local JCash user account with a zero starting balance.",
+            "Create a local CASH-G user account with a zero starting balance.",
             new String[] {"Full name", "Mobile number", "PIN"},
             fields,
             submitButton,
@@ -415,7 +415,7 @@ public class LoginFrame extends JFrame {
             }
         };
         JLabel statusLabel = createStatusLabel("Administrator user list status");
-        showAdminTableScreen("All users", "Local JCash accounts, including their role and balance.",
+        showAdminTableScreen("All users", "Local CASH-G accounts, including their role and balance.",
             tableModel, statusLabel);
         new SwingWorker<List<User>, Void>() {
             @Override
@@ -444,7 +444,7 @@ public class LoginFrame extends JFrame {
     }
 
     private void showAdminTransactionsScreen() {
-        showAdminTransactionTable("All transactions", "Activity across all local JCash accounts.", 0L);
+        showAdminTransactionTable("All transactions", "Activity across all local CASH-G accounts.", 0L);
     }
 
     private void showSpecificUserTransactionsScreen() {
@@ -535,7 +535,7 @@ public class LoginFrame extends JFrame {
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
 
-        JLabel brand = new JLabel("JCASH");
+        JLabel brand = new JLabel("CASH-G");
         brand.setFont(new Font("Segoe UI", Font.BOLD, 20));
         brand.setForeground(PRIMARY_COLOR);
 
@@ -778,7 +778,7 @@ public class LoginFrame extends JFrame {
     private void showTransferScreen(String recipient, String amountText) {
         JTextField mobileNumberField = createTextField(
             "transfer-recipient",
-            "Mobile number of the recipient JCash account"
+            "Mobile number of the recipient CASH-G account"
         );
         mobileNumberField.setText(recipient);
         JTextField amountField = createTextField(
@@ -798,7 +798,7 @@ public class LoginFrame extends JFrame {
         ));
         showFormScreen(
             "Transfer",
-            "Send money securely to another local JCash account.",
+            "Send money securely to another local CASH-G account.",
             new String[] {"Recipient mobile number", "Amount (PHP)"},
             fields,
             reviewButton,
@@ -1074,7 +1074,7 @@ public class LoginFrame extends JFrame {
         table.setName("transaction-history");
         table.getAccessibleContext().setAccessibleName("Transaction history");
         table.getAccessibleContext().setAccessibleDescription(
-            "Most recent JCash transactions, with type, signed amount, details, and date"
+            "Most recent CASH-G transactions, with type, signed amount, details, and date"
         );
         table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         table.setRowHeight(30);
