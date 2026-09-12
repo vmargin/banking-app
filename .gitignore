@@ -11,3 +11,14 @@
 *.trace.db
 *.pem
 *.key
+
+# Local assessment notes and generated evidence
+/docs/
+/output/
+/tmp/
+/design/
+/web/
+/src/main/java/com/vmargin/banking/WebUiFrame.java
+/BANKING-APP-GUIDE.md
+/SETUP-REPORT.md
+/START-TOMORROW.md

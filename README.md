@@ -4,9 +4,10 @@ An educational **Java Swing + JDBC + PostgreSQL** banking simulator for the TESD
 
 ## Status
 
-The local MVP is working: Swing login, balance dashboard, cash-in, atomic transfer,
-and per-user transaction history are backed by PostgreSQL. The automated suite has
-24 tests. Screenshot/PDF evidence is the remaining assessment-delivery work.
+The completed MVP includes Swing login, registration, balance, cash-in, atomic
+transfer, per-user transaction history, and role-aware administration backed by
+PostgreSQL. The verified suite runs 32 tests with 0 failures and 6 database
+tests skipped when the local database is unavailable.
 
 ## Submission target
 
@@ -14,7 +15,7 @@ and per-user transaction history are backed by PostgreSQL. The automated suite h
 mobile number + PIN -> logged-in balance -> cash-in / transfer -> per-user transaction history
 ```
 
-Read [Assessment Alignment](docs/ASSESSMENT-ALIGNMENT.md), [Active Delivery Plan](docs/VERTICAL-DELIVERY-PLAN.md), and [Project Management](docs/project-management.md).
+The assessment notes and internal delivery guides remain local-only.
 
 ## Development
 
@@ -33,7 +34,9 @@ manual walkthrough of the Swing screens before screenshots are submitted.
 
 ## Scope boundary
 
-The September assessment core is Java, Swing, JDBC, a local PostgreSQL database, login attempts, balance, cash-in, transfer, history, tests, and screenshot evidence. Spring Boot, deployment, Docker, React, admin roles, and production authentication are portfolio upgrades after the assessment flow is safe.
+The v1 scope is Java, Swing, JDBC, PostgreSQL, login, registration, balance, cash-in,
+transfer, history, administration, tests, and local development scripts. The WebView
+redesign is intentionally developed in the separate banking-app-v2 repository.
 
 ## Authorship
 
