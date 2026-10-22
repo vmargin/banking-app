@@ -1,43 +1,75 @@
-# JCash Banking App
+![Java desktop banking: an original THE MARGIN project cover](.github/media/cover.svg)
 
-An educational **Java Swing + JDBC + PostgreSQL** banking simulator for the TESDA Java Programming NC III assessment. It uses synthetic data only and is being built through small learner-authored issues with review and verification.
+# CASH-G / JCash: Java Desktop Banking
 
-## Status
+**The desktop foundation: Swing screens, Java services, and JDBC transactions.**
 
-The completed MVP includes Swing login, registration, balance, cash-in, atomic
-transfer, per-user transaction history, and role-aware administration backed by
-PostgreSQL. The verified suite runs 32 tests with 0 failures and 6 database
-tests skipped when the local database is unavailable.
+An educational Java banking simulator built for Java Programming NC III training and assessment preparation. It uses synthetic data and PostgreSQL. The [Spring Boot web application](https://github.com/vmargin/cashg.onrender.com) lives in a separate repository.
 
-## Submission target
+## Implemented workflows
 
-```text
-mobile number + PIN -> logged-in balance -> cash-in / transfer -> per-user transaction history
+- Mobile-number/PIN login and registration.
+- Account balance, cash-in, and atomic customer-to-customer transfers.
+- Per-user transaction history.
+- Role-aware administration.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  UI[Swing screens] --> Services[Java application services]
+  Services --> JDBC[JDBC repositories]
+  JDBC --> PG[(PostgreSQL)]
 ```
 
-The assessment notes and internal delivery guides remain local-only.
+Java services hold the application rules; JDBC repositories handle persistence and transaction boundaries. JUnit tests exercise domain and repository behavior. This is a learning simulator, not real financial software.
 
-## Development
+**Stack:** Java 21, Swing, JDBC, PostgreSQL, JUnit 5, Maven Wrapper.
 
-Use Temurin JDK 21 and the included Maven Wrapper on Windows:
+## Local development
+
+Install Temurin JDK 21 and PostgreSQL. Clone the repository, then check the toolchain:
 
 ```powershell
+git clone https://github.com/vmargin/banking-app.git
+cd banking-app
 .\scripts\dev.ps1 -Task doctor
-.\scripts\dev.ps1 -Task style
 .\scripts\dev.ps1 -Task compile
-.\scripts\dev.ps1 -Task test
 ```
 
-`test` and `verify` run the regression and JDBC checks. A green build verifies
-the covered domain, persistence, and transfer behavior; it does not replace a
-manual walkthrough of the Swing screens before screenshots are submitted.
+Database connections read these environment variables:
 
-## Scope boundary
+| Variable | Purpose |
+| --- | --- |
+| `BANKING_DB_URL` | JDBC PostgreSQL URL; defaults to `jdbc:postgresql://localhost:5432/banking_app`. |
+| `BANKING_DB_USER` | Required local database user. |
+| `BANKING_DB_PASSWORD` | Required local database password. |
 
-The v1 scope is Java, Swing, JDBC, PostgreSQL, login, registration, balance, cash-in,
-transfer, history, administration, tests, and local development scripts. The WebView
-redesign is intentionally developed in the separate banking-app-v2 repository.
+Create a dedicated empty local database and apply the included schema, replacing `YOUR_LOCAL_USER` with your local PostgreSQL role:
 
-## Authorship
+```powershell
+createdb -h localhost -U YOUR_LOCAL_USER banking_app
+psql -h localhost -U YOUR_LOCAL_USER -d banking_app -f src/main/resources/schema.sql
+```
 
-AI assistance prepares requirements, tooling, issue structure, and review. The learner writes the banking models, services, SQL, UI, and tests, then explains the resulting behaviour.
+The schema creates the tables and a synthetic administrator (`09990000000` / `1234`). Apply it only to a new development database: rerunning it updates that demo administrator's credentials. Set the environment variables above in the terminal used to launch the application. For a database-free setup, use the separate web project's H2 demo.
+
+After configuring the local database, `.\scripts\dev.ps1 -Task run` launches `com.vmargin.banking.Main`. Never use real account details or PINs.
+
+## Verify
+
+```powershell
+.\scripts\dev.ps1 -Task style
+.\scripts\dev.ps1 -Task test
+.\scripts\dev.ps1 -Task verify
+```
+
+Database-backed checks require the isolated local database and may skip without it. A passing suite covers the exercised code paths; it does not replace a manual walkthrough of Swing screens. No stale historical test count is presented as a current result.
+
+## Contribution and relationship to web v2
+
+I hand-coded desktop v1's Java interface, services, JDBC persistence, and tests. AI assistance supports requirements, tooling, issue structure, and review. Web v2 is a separate AI-assisted adaptation with Spring Boot and Thymeleaf; its screenshots do not depict this Swing application.
+
+---
+
+[More projects](https://github.com/vmargin) · [Portfolio](https://vmargin.github.io/) · [LinkedIn](https://www.linkedin.com/in/vmargin/)
